@@ -108,6 +108,7 @@ getJasmineRequireObj().Env = function(j$) {
 
     var clearResourcesForRunnable = function(id) {
         spyRegistry.clearSpies();
+        // console.log('Deleting ' + id + ' in clearResourcesForRunnable');
         delete runnableResources[id];
     };
 
@@ -234,14 +235,25 @@ getJasmineRequireObj().Env = function(j$) {
         queueRunnerFactory: queueRunnerFactory,
         nodeStart: function(suite) {
           currentlyExecutingSuites.push(suite);
+          console.log('--- Pushing suite ' + suite.id);
+          console.log('currentlyExecutingSuites is now ' + currentlyExecutingSuites.map(function(s) { return s.id;}));
           defaultResourcesForRunnable(suite.id, suite.parentSuite.id);
           reporter.suiteStarted(suite.result);
         },
         nodeComplete: function(suite, result) {
+          if (suite.id !== currentlyExecutingSuites[currentlyExecutingSuites.length - 1].id) {
+            throw new Error('Suite mismatch!');
+          }
+
+          console.log('>>>> nodeComplete: ' + suite.id);
           if (!suite.markedPending) {
+            console.log('Clearing ' + suite.id + ' because it is not marked pending');
             clearResourcesForRunnable(suite.id);
           }
-          currentlyExecutingSuites.pop();
+          var old = currentlyExecutingSuites.pop();
+          console.log('--- Popping suite '  + old.id);
+          console.log('currentlyExecutingSuites is now ' + currentlyExecutingSuites.map(function(s) { return s.id;}));
+          console.log('runnableResources is now ' + Object.keys(runnableResources));
           reporter.suiteDone(result);
         },
         orderChildren: function(node) {
@@ -257,12 +269,15 @@ getJasmineRequireObj().Env = function(j$) {
         totalSpecsDefined: totalSpecsDefined
       });
 
+      // console.log('--- Pushing suite ' + topSuite .id);
       currentlyExecutingSuites.push(topSuite);
+      // console.log('>>>> top suite is ' + topSuite.id);
 
       globalErrors.install();
       processor.execute(function() {
         clearResourcesForRunnable(topSuite.id);
-        currentlyExecutingSuites.pop();
+        var old = currentlyExecutingSuites.pop();
+        // console.log('--- Popping suite '  + old.id);
         globalErrors.uninstall();
 
         reporter.jasmineDone({
@@ -293,6 +308,13 @@ getJasmineRequireObj().Env = function(j$) {
     var spyRegistry = new j$.SpyRegistry({currentSpies: function() {
       if(!currentRunnable()) {
         throw new Error('Spies must be created in a before function or a spec');
+      }
+
+      // console.log('in spyRegistry, runable: ' + currentRunnable().id +
+      //   ', resources: ' + Object.keys(runnableResources));
+
+      if (!runnableResources[currentRunnable().id]) {
+        console.error('About to fail!');
       }
       return runnableResources[currentRunnable().id].spies;
     }});
