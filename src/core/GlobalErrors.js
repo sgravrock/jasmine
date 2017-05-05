@@ -5,7 +5,13 @@ getJasmineRequireObj().GlobalErrors = function(j$) {
 
     var onerror = function onerror() {
       var handler = handlers[handlers.length - 1];
-      handler.apply(null, Array.prototype.slice.call(arguments, 0));
+
+      if (handler) {
+        handler.apply(null, Array.prototype.slice.call(arguments, 0));
+      } else {
+        console.error('An error occurred when no error handlers were installed:');
+        console.error(arguments[0]);
+      }
     };
 
     this.uninstall = function noop() {};

@@ -46,6 +46,30 @@ describe("GlobalErrors", function() {
     expect(handler2).not.toHaveBeenCalled();
   });
 
+  describe("When there are no handlers", function() {
+    it("does not crash when there are no handlers", function () {
+      var fakeGlobal = {onerror: null},
+        errors = new jasmineUnderTest.GlobalErrors(fakeGlobal);
+
+      errors.install();
+
+      fakeGlobal.onerror('foo');
+    });
+
+    it("logs the error to the console", function() {
+      var fakeGlobal = {onerror: null},
+        errors = new jasmineUnderTest.GlobalErrors(fakeGlobal);
+
+      errors.install();
+      spyOn(console, 'error');
+
+      fakeGlobal.onerror('foo');
+      expect(console.error).toHaveBeenCalledWith(
+        'An error occurred when no error handlers were installed:');
+      expect(console.error).toHaveBeenCalledWith('foo');
+    });
+  });
+
   it("uninstalls itself, putting back a previous callback", function() {
     var originalCallback = jasmine.createSpy('error'),
         fakeGlobal = { onerror: originalCallback },
