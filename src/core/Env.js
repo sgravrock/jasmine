@@ -241,9 +241,10 @@ getJasmineRequireObj().Env = function(j$) {
           reporter.suiteStarted(suite.result);
         },
         nodeComplete: function(suite, result) {
-          if (suite.id !== currentlyExecutingSuites[currentlyExecutingSuites.length - 1].id) {
-            throw new Error('Suite mismatch!');
-          }
+          // Note: Uncommenting this "fixes" the bug, but we need to find the upstream problem.
+          // if (suite.id !== currentlyExecutingSuites[currentlyExecutingSuites.length - 1].id) {
+          //   throw new Error('Suite mismatch!');
+          // }
 
           console.log('>>>> nodeComplete: ' + suite.id);
           if (!suite.markedPending) {
