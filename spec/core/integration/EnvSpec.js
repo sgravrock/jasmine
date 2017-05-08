@@ -456,19 +456,7 @@ describe("Env integration", function() {
     env.execute();
   });
 
-  fit("does not corrupt itself in response to late async failures", function(done) {
-    var continueNow = true;
-    var nextFn = null;
-    var clearStack = function(fn) {
-      console.log('clearing stack');
-
-      if (continueNow) {
-        setTimeout(fn, 0);
-      } else {
-        nextFn = fn;
-      }
-    };
-    spyOn(jasmineUnderTest, 'getClearStack').and.returnValue(clearStack);
+  fit("copes with late async failures", function(done) {
     var global = {
       setTimeout: function(fn, delay) { setTimeout(fn, delay) },
       clearTimeout: function(fn, delay) { clearTimeout(fn, delay) },
@@ -487,16 +475,9 @@ describe("Env integration", function() {
     env.fdescribe('A suite', function() {
       env.it('fails', function(specDone) {
         console.log('spec calling done');
-        //continueNow = false;
         specDone();
         setTimeout(function() {
-          /*
-          setTimeout(function() {
-            continueNow = true;
-            nextFn();
-          });
-          */
-          jasmineUnderTest.getGlobal().onerror(new Error('fail'));
+          global.onerror(new Error('fail'));
         });
       });
     });
