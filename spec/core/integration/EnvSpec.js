@@ -1390,6 +1390,27 @@ describe("Env integration", function() {
     env.execute();
   });
 
+  it("fails in several different ways", function() {
+    var env = new jasmineUnderTest.Env(),
+        reporter = jasmine.createSpyObj('fakeReporter', [
+          "jasmineStarted",
+          "jasmineDone",
+          "suiteStarted",
+          "suiteDone",
+          "specStarted",
+          "specDone"
+        ]);
+    env.randomizeTests(true);
+    env.seed('123456');
+
+    reporter.jasmineDone.and.callFake(function(doneArg) {
+      throw new Error('oops!');
+    });
+
+    env.addReporter(reporter);
+    env.execute();
+  });
+
   it('should report pending spec messages', function(done) {
     var env = new jasmineUnderTest.Env(),
         reporter = jasmine.createSpyObj('fakeReporter', [
