@@ -164,6 +164,7 @@ getJasmineRequireObj().TreeProcessor = function() {
       if (node.children) {
         return {
           fn: function(done) {
+            console.log('executeNode(' + node.description + ')');
             nodeStart(node);
 
             queueRunnerFactory({
@@ -181,7 +182,10 @@ getJasmineRequireObj().TreeProcessor = function() {
         };
       } else {
         return {
-          fn: function(done) { node.execute(done, stats[node.id].executable); }
+          fn: function(done) {
+            console.log('executeNode(' + node.description + '): empty case');
+            node.execute(done, stats[node.id].executable);
+          }
         };
       }
     }

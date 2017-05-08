@@ -477,12 +477,15 @@ describe("Env integration", function() {
         console.log('spec calling done');
         specDone();
         setTimeout(function() {
+          console.log('Calling onerror');
           global.onerror(new Error('fail'));
+          console.log('Onerror returned');
         });
       });
     });
 
     env.describe('Ignored', function() {
+      // Note: removing this triggers the isAfterAll bug
       env.it('is not run', function() {});
     });
 
