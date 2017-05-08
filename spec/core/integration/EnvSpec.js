@@ -456,6 +456,40 @@ describe("Env integration", function() {
     env.execute();
   });
 
+  fit("copes with late async failures", function(done) {
+    var global = {
+      setTimeout: function(fn, delay) { setTimeout(fn, delay) },
+      clearTimeout: function(fn, delay) { clearTimeout(fn, delay) },
+    };
+    spyOn(jasmineUnderTest, 'getGlobal').and.returnValue(global);
+    var env = new jasmineUnderTest.Env(),
+      reporter = jasmine.createSpyObj('fakeReporter', [ "specDone", "jasmineDone" ]);
+
+    reporter.jasmineDone.and.callFake(function() {
+      console.log('reporter done');
+      done();
+    });
+
+    env.addReporter(reporter);
+
+    env.fdescribe('A suite', function() {
+      env.it('fails', function(specDone) {
+        console.log('spec calling done');
+        specDone();
+        setTimeout(function() {
+          console.log('Calling onerror');
+          global.onerror(new Error('fail'));
+          console.log('Onerror returned');
+        });
+      });
+    });
+
+    env.describe('Ignored', function() {
+    });
+
+    env.execute();
+  });
+
   describe('suiteDone reporting', function(){
     it("reports when an afterAll fails an expectation", function(done) {
       var env = new jasmineUnderTest.Env(),
