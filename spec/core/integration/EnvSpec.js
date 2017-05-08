@@ -456,6 +456,58 @@ describe("Env integration", function() {
     env.execute();
   });
 
+  fit("does not corrupt itself in response to late async failures", function(done) {
+    var continueNow = true;
+    var nextFn = null;
+    var clearStack = function(fn) {
+      console.log('clearing stack');
+
+      if (continueNow) {
+        setTimeout(fn, 0);
+      } else {
+        nextFn = fn;
+      }
+    };
+    spyOn(jasmineUnderTest, 'getClearStack').and.returnValue(clearStack);
+    var global = {
+      setTimeout: function(fn, delay) { setTimeout(fn, delay) },
+      clearTimeout: function(fn, delay) { clearTimeout(fn, delay) },
+    };
+    spyOn(jasmineUnderTest, 'getGlobal').and.returnValue(global);
+    var env = new jasmineUnderTest.Env(),
+      reporter = jasmine.createSpyObj('fakeReporter', [ "specDone", "jasmineDone" ]);
+
+    reporter.jasmineDone.and.callFake(function() {
+      console.log('reporter done');
+      done();
+    });
+
+    env.addReporter(reporter);
+
+    env.fdescribe('A suite', function() {
+      env.it('fails', function(specDone) {
+        console.log('spec calling done');
+        //continueNow = false;
+        specDone();
+        setTimeout(function() {
+          /*
+          setTimeout(function() {
+            continueNow = true;
+            nextFn();
+          });
+          */
+          jasmineUnderTest.getGlobal().onerror(new Error('fail'));
+        });
+      });
+    });
+
+    env.describe('Ignored', function() {
+      env.it('is not run', function() {});
+    });
+
+    env.execute();
+  });
+
   describe('suiteDone reporting', function(){
     it("reports when an afterAll fails an expectation", function(done) {
       var env = new jasmineUnderTest.Env(),
