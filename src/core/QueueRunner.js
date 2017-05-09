@@ -1,3 +1,5 @@
+var nextQid = 0;
+
 getJasmineRequireObj().QueueRunner = function(j$) {
 
   function once(fn) {
@@ -13,7 +15,12 @@ getJasmineRequireObj().QueueRunner = function(j$) {
 
   function QueueRunner(attrs) {
     this.queueableFns = attrs.queueableFns || [];
-    this.onComplete = attrs.onComplete || function() {};
+    var self = this;
+    this.onComplete = function() {
+      var f = attrs.onComplete || function() {};
+      console.log('QueueRunner ' + self.qid + ' calling onComplete');
+      f();
+    };
     this.clearStack = attrs.clearStack || function(fn) {fn();};
     this.onException = attrs.onException || function() {};
     this.catchException = attrs.catchException || function() { return true; };
@@ -21,11 +28,15 @@ getJasmineRequireObj().QueueRunner = function(j$) {
     this.timeout = attrs.timeout || {setTimeout: setTimeout, clearTimeout: clearTimeout};
     this.fail = attrs.fail || function() {};
     this.globalErrors = attrs.globalErrors || { pushListener: function() {}, popListener: function() {} };
+    this.qid = ++nextQid;
   }
 
   QueueRunner.prototype.execute = function() {
+    console.log('QueueRunner ' + this.qid + ' executing');
     this.run(this.queueableFns, 0);
   };
+
+  var nextAid = 0;
 
   QueueRunner.prototype.run = function(queueableFns, recursiveIndex) {
     var length = queueableFns.length,
@@ -43,6 +54,7 @@ getJasmineRequireObj().QueueRunner = function(j$) {
       }
     }
 
+    console.log('QueueRunner ' + self.qid + ' calling clearStack');
     this.clearStack(this.onComplete);
 
     function attemptSync(queueableFn) {
@@ -54,14 +66,19 @@ getJasmineRequireObj().QueueRunner = function(j$) {
     }
 
     function attemptAsync(queueableFn) {
+      var aid = ++nextAid;
       var clearTimeout = function () {
           Function.prototype.apply.apply(self.timeout.clearTimeout, [j$.getGlobal(), [timeoutId]]);
         },
         handleError = function(error) {
+          console.log(self.qid + '[' + aid + '] handleError() about to call onException (' + queueableFn.description + ')');
           onException(error);
+          console.log(self.qid + '[' + aid + '] handleError() about to call next (' + queueableFn.description + ')');
           next();
         },
         next = once(function () {
+          console.log(self.qid + '[' + aid + '] next() (' + queueableFn.description + ')');
+          console.log('(' + iterativeIndex + ' of ' + queueableFns.length + ')');
           clearTimeout(timeoutId);
           self.globalErrors.popListener(handleError);
           self.run(queueableFns, iterativeIndex + 1);
@@ -84,6 +101,7 @@ getJasmineRequireObj().QueueRunner = function(j$) {
       }
 
       try {
+        console.log(self.qid + '[' + aid + '] calling queueable (' + queueableFn.description + ')');
         queueableFn.fn.call(self.userContext, next);
       } catch (e) {
         handleException(e, queueableFn);
