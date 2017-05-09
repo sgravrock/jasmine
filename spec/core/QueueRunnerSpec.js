@@ -314,7 +314,7 @@ describe("QueueRunner", function() {
     expect(nextQueueableFn.fn).toHaveBeenCalled();
   });
 
-  fit("handles exceptions thrown while waiting for the stack to clear", function() {
+  it("handles exceptions thrown while waiting for the stack to clear", function() {
     var queueableFn = { fn: function(done) { done() } },
       global = {},
       errorListeners = [],
@@ -368,6 +368,8 @@ describe("QueueRunner", function() {
 
     queueRunner.execute();
     expect(afterFn.fn).toHaveBeenCalled();
-    expect(clearStack).toHaveBeenCalledWith(completeCallback);
+    expect(clearStack).toHaveBeenCalled();
+    clearStack.calls.argsFor(0)[0]();
+    expect(completeCallback).toHaveBeenCalled();
   });
 });

@@ -456,7 +456,7 @@ describe("Env integration", function() {
     env.execute();
   });
 
-  fit("copes with late async failures", function(done) {
+  it("copes with late async failures", function(done) {
     var global = {
       setTimeout: function(fn, delay) { setTimeout(fn, delay) },
       clearTimeout: function(fn, delay) { clearTimeout(fn, delay) },
