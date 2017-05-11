@@ -314,6 +314,12 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     var ensureIsFunction = function(fn, caller) {
+      if (!j$.isFunction_(fn) && !j$.isA_('AsyncFunction', fn)) {
+        throw new Error(caller + ' expects a (possibly async) function argument; received ' + j$.getType_(fn));
+      }
+    };
+
+    var ensureIsSyncFunction = function(fn, caller) {
       if (!j$.isFunction_(fn)) {
         throw new Error(caller + ' expects a function argument; received ' + j$.getType_(fn));
       }
@@ -334,7 +340,7 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     this.describe = function(description, specDefinitions) {
-      ensureIsFunction(specDefinitions, 'describe');
+      ensureIsSyncFunction(specDefinitions, 'describe');
       var suite = suiteFactory(description);
       if (specDefinitions.length > 0) {
         throw new Error('describe does not expect any arguments');
@@ -347,7 +353,7 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     this.xdescribe = function(description, specDefinitions) {
-      ensureIsFunction(specDefinitions, 'xdescribe');
+      ensureIsSyncFunction(specDefinitions, 'xdescribe');
       var suite = suiteFactory(description);
       suite.pend();
       addSpecsToSuite(suite, specDefinitions);
@@ -357,7 +363,7 @@ getJasmineRequireObj().Env = function(j$) {
     var focusedRunnables = [];
 
     this.fdescribe = function(description, specDefinitions) {
-      ensureIsFunction(specDefinitions, 'fdescribe');
+      ensureIsSyncFunction(specDefinitions, 'fdescribe');
       var suite = suiteFactory(description);
       suite.isFocused = true;
 
