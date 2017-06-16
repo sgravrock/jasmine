@@ -103,8 +103,9 @@ describe("Spec", function() {
 
     spec.execute();
 
-    var allSpecFns = fakeQueueRunner.calls.mostRecent().args[0].queueableFns;
-    expect(allSpecFns).toEqual([before, queueableFn, after]);
+    var options = fakeQueueRunner.calls.mostRecent().args[0];
+    expect(options.queueableFns).toEqual([before, queueableFn]);
+    expect(options.cleanupFns).toEqual([after]);
   });
 
   it("is marked pending if created without a function body", function() {
