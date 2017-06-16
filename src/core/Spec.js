@@ -64,7 +64,7 @@ getJasmineRequireObj().Spec = function(j$) {
       onException: function() { self.onException.apply(self, arguments); },
       onComplete: complete,
       userContext: this.userContext()
-    });
+    }, true);
 
     function complete(enabledAgain) {
       self.result.status = self.status(enabledAgain);

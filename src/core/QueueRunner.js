@@ -23,7 +23,7 @@ getJasmineRequireObj().QueueRunner = function(j$) {
     this.timeout = attrs.timeout || {setTimeout: setTimeout, clearTimeout: clearTimeout};
     this.fail = attrs.fail || function() {};
     this.globalErrors = attrs.globalErrors || { pushListener: function() {}, popListener: function() {} };
-    this.completeOnFirstError = attrs.completeOnFirstError;
+    this.completeOnFirstError = !!attrs.completeOnFirstError;
   }
 
   QueueRunner.prototype.execute = function() {

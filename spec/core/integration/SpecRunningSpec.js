@@ -871,6 +871,7 @@ describe("jasmine spec running", function () {
         expect(actions).toEqual([
           'outer beforeEach',
           'inner afterEach',
+          'outer afterEach'
         ]);
         done();
       };
