@@ -836,4 +836,48 @@ describe("jasmine spec running", function () {
     env.execute();
   });
 
+  describe("When throwOnExpectationFailure is set", function() {
+    it("skips to cleanup functions after an error", function(done) {
+      var actions = [];
+
+      env.describe('Something', function() {
+        env.beforeEach(function() {
+          actions.push('outer beforeEach');
+          throw new Error("error");
+        });
+
+        env.afterEach(function() {
+          actions.push('outer afterEach');
+        });
+
+        env.describe('Inner', function() {
+          env.beforeEach(function() {
+            actions.push('inner beforeEach');
+          });
+
+          env.afterEach(function() {
+            actions.push('inner afterEach');
+          });
+
+          env.it('does it' , function() {
+            actions.push('inner it');
+          });
+        });
+      });
+
+      env.throwOnExpectationFailure(true);
+
+      var assertions = function() {
+        expect(actions).toEqual([
+          'outer beforeEach',
+          'inner afterEach',
+        ]);
+        done();
+      };
+
+      env.addReporter({jasmineDone: assertions});
+
+      env.execute();
+    });
+  });
 });

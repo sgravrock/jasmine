@@ -520,6 +520,7 @@ getJasmineRequireObj().Env = function(j$) {
 
     this.afterEach = function(afterEachFunction, timeout) {
       ensureIsFunctionOrAsync(afterEachFunction, 'afterEach');
+      afterEachFunction.isCleanup = true;
       currentDeclarationSuite.afterEach({
         fn: afterEachFunction,
         timeout: function() { return timeout || j$.DEFAULT_TIMEOUT_INTERVAL; }
