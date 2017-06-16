@@ -450,11 +450,25 @@ describe("QueueRunner", function() {
           queueableFns: [queueableFn, nextQueueableFn],
           cleanupFns: [cleanupFn],
           completeOnFirstError: true
-       });
+        });
 
       queueRunner.execute();
       expect(nextQueueableFn.fn).not.toHaveBeenCalled();
       expect(cleanupFn.fn).toHaveBeenCalled();
+    });
+
+    it("does not skip when a cleanup function throws", function() {
+      var queueableFn = { fn: function() { } },
+        cleanupFn1 = { fn: function() { throw new Error("error"); } },
+        cleanupFn2 = { fn: jasmine.createSpy("cleanupFn2") },
+        queueRunner = new jasmineUnderTest.QueueRunner({
+          queueableFns: [queueableFn],
+          cleanupFns: [cleanupFn1, cleanupFn2],
+          completeOnFirstError: true
+        });
+
+      queueRunner.execute();
+      expect(cleanupFn2.fn).toHaveBeenCalled();
     });
 
     describe("with an asynchronous function", function() {

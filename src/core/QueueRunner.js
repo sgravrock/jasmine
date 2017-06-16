@@ -35,8 +35,12 @@ getJasmineRequireObj().QueueRunner = function(j$) {
     this.run(0);
   };
 
-  QueueRunner.prototype.skipToCleanup = function() {
-    this.run(this.firstCleanupIx);
+  QueueRunner.prototype.skipToCleanup = function(lastRanIndex) {
+    if (lastRanIndex < this.firstCleanupIx) {
+      this.run(this.firstCleanupIx);
+    } else {
+      this.run(lastRanIndex + 1);
+    }
   };
 
   QueueRunner.prototype.run = function(recursiveIndex) {
@@ -46,15 +50,14 @@ getJasmineRequireObj().QueueRunner = function(j$) {
 
 
     for(iterativeIndex = recursiveIndex; iterativeIndex < length; iterativeIndex++) {
-      var queueableFn = this.queueableFns[iterativeIndex];
-      var result = attempt(queueableFn);
+      var result = attempt(iterativeIndex);
 
       if (!result.completedSynchronously) {
         return;
       }
 
       if (this.completeOnFirstError && result.errored) {
-        this.skipToCleanup();
+        this.skipToCleanup(iterativeIndex);
         return;
       }
     }
@@ -64,7 +67,7 @@ getJasmineRequireObj().QueueRunner = function(j$) {
       self.onComplete();
     });
 
-    function attempt(queueableFn) {
+    function attempt() {
       var clearTimeout = function () {
           Function.prototype.apply.apply(self.timeout.clearTimeout, [j$.getGlobal(), [timeoutId]]);
         },
@@ -85,7 +88,7 @@ getJasmineRequireObj().QueueRunner = function(j$) {
 
           function runNext() {
             if (self.completeOnFirstError && errored) {
-              self.skipToCleanup();
+              self.skipToCleanup(iterativeIndex);
             } else {
               self.run(iterativeIndex + 1);
             }
@@ -98,6 +101,7 @@ getJasmineRequireObj().QueueRunner = function(j$) {
           }
         }),
         errored = false,
+        queueableFn = self.queueableFns[iterativeIndex],
         timeoutId;
 
       next.fail = function() {
