@@ -570,6 +570,10 @@ getJasmineRequireObj().Env = function(j$) {
         message: message,
         error: error && error.message ? error : null
       });
+
+      if (self.throwingExpectationFailures()) {
+        throw new Error(message);
+      }
     };
   }
 
