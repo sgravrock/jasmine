@@ -120,7 +120,9 @@ describe("Spec", function() {
 
     spec.execute();
 
-    expect(fakeQueueRunner.calls.mostRecent().args[1]).toEqual(true);
+    expect(fakeQueueRunner).toHaveBeenCalledWith(jasmine.objectContaining({
+      isLeaf: true
+    }));
   });
 
   it("is marked pending if created without a function body", function() {

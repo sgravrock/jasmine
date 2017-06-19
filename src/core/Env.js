@@ -190,13 +190,13 @@ getJasmineRequireObj().Env = function(j$) {
       return seed;
     };
 
-    var queueRunnerFactory = function(options, isLeaf) {
+    var queueRunnerFactory = function(options) {
       options.catchException = catchException;
       options.clearStack = options.clearStack || clearStack;
       options.timeout = {setTimeout: realSetTimeout, clearTimeout: realClearTimeout};
       options.fail = self.fail;
       options.globalErrors = globalErrors;
-      options.completeOnFirstError = throwOnExpectationFailure && isLeaf;
+      options.completeOnFirstError = throwOnExpectationFailure && options.isLeaf;
 
       new j$.QueueRunner(options).execute();
     };
