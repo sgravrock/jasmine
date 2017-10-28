@@ -46,8 +46,6 @@ jasmineRequire.HtmlReporter = function(j$) {
       timer.start();
     };
 
-    var summary = createDom('div', {className: 'jasmine-summary'});
-
     var topResults = new j$.ResultsNode({}, '', null),
       currentParent = topResults;
 
@@ -120,10 +118,20 @@ jasmineRequire.HtmlReporter = function(j$) {
     };
 
     this.jasmineDone = function(doneResult) {
+      showBanner();
+      showStats(doneResult);
+      showOverallResult(doneResult);
+      showResultDetails(doneResult);
+
+      if (failures.length) {
+        showMenuBar();
+      }
+    };
+
+    return this;
+
+    function showBanner() {
       var banner = find('.jasmine-banner');
-      var alert = find('.jasmine-alert');
-      var order = doneResult && doneResult.order;
-      alert.appendChild(createDom('span', {className: 'jasmine-duration'}, 'finished in ' + timer.elapsed() / 1000 + 's'));
 
       banner.appendChild(
         createDom('div', { className: 'jasmine-run-options' },
@@ -178,6 +186,12 @@ jasmineRequire.HtmlReporter = function(j$) {
           optionsPayload.className += ' jasmine-open';
         }
       };
+    }
+
+    function showStats(doneResult) {
+      var alert = find('.jasmine-alert');
+      var order = doneResult && doneResult.order;
+      alert.appendChild(createDom('span', {className: 'jasmine-duration'}, 'finished in ' + timer.elapsed() / 1000 + 's'));
 
       if (specsExecuted < totalSpecsDefined) {
         var skippedMessage = 'Ran ' + specsExecuted + ' of ' + totalSpecsDefined + ' specs - run all';
@@ -188,8 +202,12 @@ jasmineRequire.HtmlReporter = function(j$) {
           )
         );
       }
+    }
+
+    function showOverallResult(doneResult) {
       var statusBarMessage = '';
       var statusBarClassName = 'jasmine-bar ';
+      var alert = find('.jasmine-alert');
 
       if (totalSpecsDefined > 0) {
         statusBarMessage += pluralize('spec', specsExecuted) + ', ' + pluralize('failure', failureCount);
@@ -201,6 +219,7 @@ jasmineRequire.HtmlReporter = function(j$) {
       }
 
       var seedBar;
+      var order = doneResult && doneResult.order;
       if (order && order.random) {
         seedBar = createDom('span', {className: 'jasmine-seed-bar'},
           ', randomized with seed ',
@@ -225,8 +244,11 @@ jasmineRequire.HtmlReporter = function(j$) {
         var failure = globalFailures[i];
         alert.appendChild(createDom('span', {className: errorBarClassName}, errorBarMessagePrefix + failure.message));
       }
+    }
 
+    function showResultDetails(doneResult) {
       var results = find('.jasmine-results');
+      var summary = createDom('div', {className: 'jasmine-summary'});
       results.appendChild(summary);
 
       summaryList(topResults, summary);
@@ -271,34 +293,34 @@ jasmineRequire.HtmlReporter = function(j$) {
           }
         }
       }
+    }
 
-      if (failures.length) {
-        alert.appendChild(
-          createDom('span', {className: 'jasmine-menu jasmine-bar jasmine-spec-list'},
-            createDom('span', {}, 'Spec List | '),
-            createDom('a', {className: 'jasmine-failures-menu', href: '#'}, 'Failures')));
-        alert.appendChild(
-          createDom('span', {className: 'jasmine-menu jasmine-bar jasmine-failure-list'},
-            createDom('a', {className: 'jasmine-spec-list-menu', href: '#'}, 'Spec List'),
-            createDom('span', {}, ' | Failures ')));
+    function showMenuBar() {
+      var alert = find('.jasmine-alert');
+      alert.appendChild(
+        createDom('span', {className: 'jasmine-menu jasmine-bar jasmine-spec-list'},
+          createDom('span', {}, 'Spec List | '),
+          createDom('a', {className: 'jasmine-failures-menu', href: '#'}, 'Failures')));
+      alert.appendChild(
+        createDom('span', {className: 'jasmine-menu jasmine-bar jasmine-failure-list'},
+          createDom('a', {className: 'jasmine-spec-list-menu', href: '#'}, 'Spec List'),
+          createDom('span', {}, ' | Failures ')));
 
-        find('.jasmine-failures-menu').onclick = function() {
-          setMenuModeTo('jasmine-failure-list');
-        };
-        find('.jasmine-spec-list-menu').onclick = function() {
-          setMenuModeTo('jasmine-spec-list');
-        };
-
+      find('.jasmine-failures-menu').onclick = function() {
         setMenuModeTo('jasmine-failure-list');
+      };
+      find('.jasmine-spec-list-menu').onclick = function() {
+        setMenuModeTo('jasmine-spec-list');
+      };
 
-        var failureNode = find('.jasmine-failures');
-        for (i = 0; i < failures.length; i++) {
-          failureNode.appendChild(failures[i]);
-        }
+      setMenuModeTo('jasmine-failure-list');
+
+      var failureNode = find('.jasmine-failures');
+      for (i = 0; i < failures.length; i++) {
+        failureNode.appendChild(failures[i]);
       }
-    };
+    }
 
-    return this;
 
     function find(selector) {
       return getContainer().querySelector('.jasmine_html-reporter ' + selector);
