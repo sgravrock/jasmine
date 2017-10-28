@@ -208,6 +208,52 @@ describe("HtmlReporter", function() {
     });
   });
 
+  describe("when there are loading errors", function() {
+    it("displays the errors in their own alert bars", function() {
+      var env = new jasmineUnderTest.Env(),
+        container = document.createElement("div"),
+        getContainer = function() { return container; },
+        reporter = new jasmineUnderTest.HtmlReporter({
+          env: env,
+          getContainer: getContainer,
+          createElement: function() { return document.createElement.apply(document, arguments); },
+          createTextNode: function() { return document.createTextNode.apply(document, arguments); }
+        });
+
+      reporter.loadingFailed([
+        new ErrorEvent('error', {
+          message : 'nope',
+          lineno : 42,
+          filename : 'somefile.js'
+        }),
+        new ErrorEvent('error', {
+          message : 'It failed',
+          filename : ''
+        }),
+      ]);
+
+      var alertBars = container.querySelectorAll(".jasmine-alert .jasmine-bar");
+
+      expect(alertBars.length).toEqual(3);
+
+      expect(alertBars[0].getAttribute("class")).toEqual('jasmine-bar jasmine-errored');
+      expect(alertBars[0].innerHTML).toEqual('Errors occured before Jasmine started up. This may indicate syntax errors or bugs in the specs or the code under test. The browser console might contain more information.');
+
+
+      expect(alertBars[1].getAttribute("class")).toEqual('jasmine-bar jasmine-errored');
+      expect(alertBars[1].innerHTML).toMatch(/Type: error/);
+      expect(alertBars[1].innerHTML).toMatch(/Message: nope/);
+      expect(alertBars[1].innerHTML).toMatch(/File: somefile.js/);
+      expect(alertBars[1].innerHTML).toMatch(/Line: 42/);
+
+      expect(alertBars[2].getAttribute("class")).toEqual('jasmine-bar jasmine-errored');
+      expect(alertBars[2].innerHTML).toMatch(/Type: error/);
+      expect(alertBars[2].innerHTML).toMatch(/Message: It failed/);
+      expect(alertBars[2].innerHTML).not.toMatch(/File:/);
+      expect(alertBars[2].innerHTML).not.toMatch(/Line:/);
+    });
+  });
+
   describe("when Jasmine is done", function() {
     it("adds EMPTY to the link title of specs that have no expectations", function() {
       if (!window.console) {

@@ -22,7 +22,21 @@ jasmineRequire.HtmlReporter = function(j$) {
       pendingSpecCount = 0,
       htmlReporterMain,
       symbols,
-      failedSuites = [];
+      failedSuites = [],
+      loadErrors = [];
+
+    /* loadingFailed is not part of the standard reporter interface. It should
+     * be called from boot.js if errors are detected while loading the specs
+     * or the code under test.
+     *
+     * If loadingFailed is called, it should be the only method that's called
+     * on this reporter.
+     */
+    this.loadingFailed = function(errors) {
+      this.initialize();
+      loadErrors = errors;
+      this.jasmineDone();
+    };
 
     this.initialize = function() {
       clearPrior();
@@ -119,12 +133,17 @@ jasmineRequire.HtmlReporter = function(j$) {
 
     this.jasmineDone = function(doneResult) {
       showBanner();
-      showStats(doneResult);
-      showOverallResult(doneResult);
-      showResultDetails(doneResult);
 
-      if (failures.length) {
-        showMenuBar();
+      if (loadErrors.length) {
+        showLoadErrors();
+      } else {
+        showStats(doneResult);
+        showOverallResult(doneResult);
+        showResultDetails(doneResult);
+
+        if (failures.length) {
+          showMenuBar();
+        }
       }
     };
 
@@ -321,6 +340,31 @@ jasmineRequire.HtmlReporter = function(j$) {
       }
     }
 
+    function showLoadErrors() {
+      var alert = find('.jasmine-alert');
+      alert.appendChild(
+        createDom('span', {className: 'jasmine-bar jasmine-errored'},
+          'Errors occured before Jasmine started up. This may indicate ' +
+          'syntax errors or bugs in the specs or the code under test. The ' +
+          'browser console might contain more information.'
+        )
+      );
+
+      loadErrors.forEach(function(error) {
+        var bar = createDom('span', {className: 'jasmine-bar jasmine-errored'},
+          'Type: ' + error.type, createDom('br'),
+          'Message: ' + error.message, createDom('br')
+        );
+
+        if (error.filename) {
+          bar.appendChild(createTextNode('File: ' + error.filename));
+          bar.appendChild(createDom('br'));
+          bar.appendChild(createTextNode('Line: ' + error.lineno));
+        }
+
+        alert.appendChild(bar);
+      });
+    }
 
     function find(selector) {
       return getContainer().querySelector('.jasmine_html-reporter ' + selector);
