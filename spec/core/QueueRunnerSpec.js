@@ -1,4 +1,7 @@
 describe("QueueRunner", function() {
+  afterAll(function() {
+    expect("").toBe("nope");
+  });
 
   it("runs all the functions it's passed", function() {
     var calls = [],

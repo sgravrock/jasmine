@@ -286,4 +286,3 @@ describe("jasmineUnderTest.pp", function () {
 
     expect(jasmineUnderTest.pp(obj)).toEqual("null({ foo: 'bar' })");
   });
-});

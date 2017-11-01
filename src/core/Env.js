@@ -91,6 +91,19 @@ getJasmineRequireObj().Env = function(j$) {
     ]);
 
     var globalErrors = new j$.GlobalErrors();
+    globalErrors.install();
+    globalErrors.pushListener(function(e) {
+    //  topSuite.onException(e);
+      var data = {
+        matcherName: '',
+        passed: false,
+        expected: '',
+        actual: '',
+        error: arguments[0]
+      };
+      
+      topSuite.result.failedExpectations.push(topSuite.expectationResultFactory(data));
+    });
 
     this.specFilter = function() {
       return true;
@@ -260,6 +273,7 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     this.execute = function(runnablesToRun) {
+      globalErrors.popListener();
       if(!runnablesToRun) {
         if (focusedRunnables.length) {
           runnablesToRun = focusedRunnables;
@@ -315,11 +329,9 @@ getJasmineRequireObj().Env = function(j$) {
 
       currentlyExecutingSuites.push(topSuite);
 
-      globalErrors.install();
       processor.execute(function() {
         clearResourcesForRunnable(topSuite.id);
         currentlyExecutingSuites.pop();
-        globalErrors.uninstall();
 
         /**
          * Information passed to the {@link Reporter#jasmineDone} event.

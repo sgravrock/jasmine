@@ -1974,4 +1974,42 @@ describe("Env integration", function() {
 
     env.execute();
   });
+
+  // TODO: only in browser!
+  it('reports errors that occur during loading', function() {
+    var env = new jasmineUnderTest.Env(),
+      reporter = jasmine.createSpyObj('reporter', ['jasmineDone', 'suiteDone', 'specDone']),
+      error1 = new ErrorEvent('error', {
+        message: 'nope'
+      }),
+      error2 = new ErrorEvent('error2', {
+        message: 'still nope'
+      });
+
+    env.addReporter(reporter);
+    window.onerror(error1);
+    window.onerror(error2);
+
+    env.execute();
+
+    expect(reporter.suiteDone).toHaveBeenCalledWith({
+      status: 'failed',
+      failedExpectations: [
+        {
+          matcherName: '',
+          passed: false,
+          expected: '',
+          actual: '',
+          message: 'nope'
+        },
+        {
+          matcherName: '',
+          passed: false,
+          expected: '',
+          actual: '',
+          message: 'still nope'
+        }
+      ]
+    })
+  });
 });
