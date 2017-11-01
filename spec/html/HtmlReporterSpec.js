@@ -733,6 +733,30 @@ describe("HtmlReporter", function() {
       expect(alertBars[0].innerHTML).toMatch(/No specs found/);
     });
 
+    it("reports failure if there are global errors", function() {
+        var env = new jasmineUnderTest.Env(),
+          container = document.createElement("div"),
+          getContainer = function() { return container; },
+          reporter = new jasmineUnderTest.HtmlReporter({
+            env: env,
+            getContainer: getContainer,
+            createElement: function() { return document.createElement.apply(document, arguments); },
+            createTextNode: function() { return document.createTextNode.apply(document, arguments); }
+          });
+        reporter.initialize();
+        reporter.jasmineStarted({ totalSpecsDefined: 0 });
+        reporter.jasmineDone({
+          failedExpectations: [{
+            passed: false,
+            message: 'nope'
+          }]
+        });
+
+        var alertBars = container.querySelectorAll(".jasmine-alert .jasmine-bar");
+        expect(alertBars.length).toEqual(2);
+        expect(alertBars[1].getAttribute('class')).toMatch(/jasmine-errored/);
+    });
+
     describe("and all specs pass", function() {
       var env, container, reporter;
       beforeEach(function() {

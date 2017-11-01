@@ -189,7 +189,7 @@ jasmineRequire.HtmlReporter = function(j$) {
         );
       }
       var statusBarMessage = '';
-      var statusBarClassName = 'jasmine-bar ';
+      var statusBarClassName = 'jasmine-overall-result jasmine-bar ';
 
       if (totalSpecsDefined > 0) {
         statusBarMessage += pluralize('spec', specsExecuted) + ', ' + pluralize('failure', failureCount);
