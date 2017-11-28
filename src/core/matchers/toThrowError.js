@@ -56,8 +56,6 @@ getJasmineRequireObj().toThrowError = function(j$) {
 
         if (isAnErrorType(arguments[1])) {
           return exactMatcher(null, arguments[1]);
-        } else if (j$.isFunction_(arguments[1])) {
-          return predicateMatcher(arguments[1]);
         } else {
           return exactMatcher(arguments[1], null);
         }
@@ -74,30 +72,12 @@ getJasmineRequireObj().toThrowError = function(j$) {
       };
     }
 
-    function predicateMatcher(predicate) {
-      return {
-        match: function(thrown) {
-          if (predicate(thrown)) {
-            return pass(function() {
-              return 'Expected function not to throw an exception matching a predicate.';
-            });
-          } else {
-            return fail(function() {
-              return 'Expected function to throw an exception matching a predicate, ' +
-                'but it threw ' + j$.fnNameFor(thrown.constructor) + ' with message ' +
-                j$.pp(thrown.message) + '.';
-            });
-          }
-        }
-      };
-    }
-
     function exactMatcher(expected, errorType) {
       if (expected && !isStringOrRegExp(expected)) {
         if (errorType) {
           throw new Error(getErrorMsg('Expected error message is not a string or RegExp.'));
         } else {
-          throw new Error(getErrorMsg('Expected is not an Error, string, RegExp, or Function.'));
+          throw new Error(getErrorMsg('Expected is not an Error, string, or RegExp.'));
         }
       }
 
@@ -194,4 +174,109 @@ getJasmineRequireObj().toThrowError = function(j$) {
   }
 
   return toThrowError;
+};
+
+getJasmineRequireObj().toThrowMatching = function(j$) {
+
+  // TODO fix message
+  var getErrorMsg =  j$.formatErrorMsg('<toThrowError>', 'expect(function() {<expectation>}).toThrowError(<ErrorConstructor>, <message>)');
+
+  // TODO FIX JSDOC
+  /**
+   * {@link expect} a function to `throw` an `Error`.
+   * @function
+   * @name matchers#toThrowError
+   * @param {Error} [expected] - `Error` constructor the object that was thrown needs to be an instance of. If not provided, `Error` will be used.
+   * @param {RegExp|String} [message] - The message that should be set on the thrown `Error`
+   * @example
+   * expect(function() { return 'things'; }).toThrowError(MyCustomError, 'message');
+   * expect(function() { return 'things'; }).toThrowError(MyCustomError, /bar/);
+   * expect(function() { return 'stuff'; }).toThrowError(MyCustomError);
+   * expect(function() { return 'other'; }).toThrowError(/foo/);
+   * expect(function() { return 'other'; }).toThrowError();
+   */
+  function toThrowMatching () {
+    return {
+      compare: function(actual, predicate) {
+        var errorMatcher = predicateMatcher(predicate),
+          thrown;
+
+        if (typeof actual != 'function') {
+          throw new Error(getErrorMsg('Actual is not a Function'));
+        }
+
+        try {
+          actual();
+          return fail('Expected function to throw an Error.');
+        } catch (e) {
+          thrown = e;
+        }
+
+        if (!isErrorObject(thrown)) {
+          return fail(function() { return 'Expected function to throw an Error, but it threw ' + j$.pp(thrown) + '.'; });
+        }
+
+        return errorMatcher.match(thrown);
+      }
+    };
+
+    function predicateMatcher(predicate) {
+      return {
+        match: function(thrown) {
+          if (predicate(thrown)) {
+            return pass(function() {
+              return 'Expected function not to throw an exception matching a predicate.';
+            });
+          } else {
+            return fail(function() {
+              return 'Expected function to throw an exception matching a predicate, ' +
+                'but it threw ' + j$.fnNameFor(thrown.constructor) + ' with message ' +
+                j$.pp(thrown.message) + '.';
+            });
+          }
+        }
+      };
+    }
+
+    function isStringOrRegExp(potential) {
+      return potential instanceof RegExp || (typeof potential == 'string');
+    }
+
+    function isAnErrorType(type) {
+      if (typeof type !== 'function') {
+        return false;
+      }
+
+      var Surrogate = function() {};
+      Surrogate.prototype = type.prototype;
+      return isErrorObject(new Surrogate());
+    }
+
+    function isErrorObject(thrown) {
+      if (thrown instanceof Error) {
+        return true;
+      }
+      if (thrown && thrown.constructor && thrown.constructor.constructor &&
+          (thrown instanceof (thrown.constructor.constructor('return this')()).Error)) {
+        return true;
+      }
+      return false;
+    }
+  }
+
+  function pass(message) {
+    return {
+      pass: true,
+      message: message
+    };
+  }
+
+  function fail(message) {
+    return {
+      pass: false,
+      message: message
+    };
+  }
+
+  return toThrowMatching;
 };
