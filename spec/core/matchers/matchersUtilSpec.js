@@ -348,7 +348,7 @@ describe("matchersUtil", function() {
       expect(jasmineUnderTest.matchersUtilFactory([]).equals(true, asymmetricTester, [symmetricTester])).toBe(true);
     });
 
-    it("passes itself and equality testers to asymmetric equality testers", function() {
+    it("passes itself to asymmetric equality testers", function() {
       var tester = function(a, b) {};
       var asymmetricTester = { asymmetricMatch: jasmine.createSpy('asymmetricMatch') };
       asymmetricTester.asymmetricMatch.and.returnValue(true);
@@ -356,7 +356,7 @@ describe("matchersUtil", function() {
       var subject = jasmineUnderTest.matchersUtilFactory([tester]);
 
       expect(subject.equals(asymmetricTester, other)).toBe(true);
-      expect(asymmetricTester.asymmetricMatch).toHaveBeenCalledWith(other, [tester], subject);
+      expect(asymmetricTester.asymmetricMatch).toHaveBeenCalledWith(other, subject);
     });
 
     it("passes when an Any is compared to an Any that checks for the same type", function() {

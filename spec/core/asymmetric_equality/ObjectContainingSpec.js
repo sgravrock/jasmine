@@ -17,19 +17,19 @@ describe("ObjectContaining", function() {
   it("matches when the key/value pair is present in the actual", function() {
     var containing = new jasmineUnderTest.ObjectContaining({foo: "fooVal"});
 
-    expect(containing.asymmetricMatch({foo: "fooVal", bar: "barVal"}, [], jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
+    expect(containing.asymmetricMatch({foo: "fooVal", bar: "barVal"}, jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
   });
 
   it("does not match when the key/value pair is not present in the actual", function() {
     var containing = new jasmineUnderTest.ObjectContaining({foo: "fooVal"});
 
-    expect(containing.asymmetricMatch({bar: "barVal", quux: "quuxVal"}, [], jasmineUnderTest.matchersUtilFactory([]))).toBe(false);
+    expect(containing.asymmetricMatch({bar: "barVal", quux: "quuxVal"}, jasmineUnderTest.matchersUtilFactory([]))).toBe(false);
   });
 
   it("does not match when the key is present but the value is different in the actual", function() {
     var containing = new jasmineUnderTest.ObjectContaining({foo: "other"});
 
-    expect(containing.asymmetricMatch({foo: "fooVal", bar: "barVal"}, [], jasmineUnderTest.matchersUtilFactory([]))).toBe(false);
+    expect(containing.asymmetricMatch({foo: "fooVal", bar: "barVal"}, jasmineUnderTest.matchersUtilFactory([]))).toBe(false);
   });
 
   it("jasmineToString's itself", function() {
@@ -41,13 +41,13 @@ describe("ObjectContaining", function() {
   it("matches recursively", function() {
     var containing = new jasmineUnderTest.ObjectContaining({one: new jasmineUnderTest.ObjectContaining({two: {}})});
 
-    expect(containing.asymmetricMatch({one: {two: {}}}, [], jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
+    expect(containing.asymmetricMatch({one: {two: {}}}, jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
   });
 
   it("matches when key is present with undefined value", function() {
     var containing = new jasmineUnderTest.ObjectContaining({ one: undefined });
 
-    expect(containing.asymmetricMatch({ one: undefined }, [], jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
+    expect(containing.asymmetricMatch({ one: undefined }, jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
   });
 
   it("does not match when key with undefined value is not present", function() {
@@ -66,7 +66,7 @@ describe("ObjectContaining", function() {
     Object.defineProperty(definedPropertyObject, "foo", {
       get: function() { return "fooVal" }
     });
-    expect(containing.asymmetricMatch(definedPropertyObject, [], jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
+    expect(containing.asymmetricMatch(definedPropertyObject, jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
   });
 
   it("matches prototype properties", function(){
@@ -84,7 +84,7 @@ describe("ObjectContaining", function() {
       obj = new Foo();
     }
 
-    expect(containing.asymmetricMatch(obj, [], jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
+    expect(containing.asymmetricMatch(obj, jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
   });
 
   it("uses custom equality testers", function() {
@@ -97,6 +97,6 @@ describe("ObjectContaining", function() {
     };
     var containing = new jasmineUnderTest.ObjectContaining({foo: "fooVal"});
 
-    expect(containing.asymmetricMatch({foo: "fooBar"}, [tester], jasmineUnderTest.matchersUtilFactory([tester]))).toBe(true);
+    expect(containing.asymmetricMatch({foo: "fooBar"}, jasmineUnderTest.matchersUtilFactory([tester]))).toBe(true);
   });
 });

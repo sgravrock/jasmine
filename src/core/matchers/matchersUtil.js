@@ -67,7 +67,7 @@ getJasmineRequireObj().matchersUtilFactory = function(j$) {
       }
 
       if (asymmetricA) {
-        result = a.asymmetricMatch(b, customTesters, matchersUtil);
+        result = a.asymmetricMatch(b, matchersUtil);
         if (!result) {
           diffBuilder.record(a, b);
         }
@@ -75,7 +75,7 @@ getJasmineRequireObj().matchersUtilFactory = function(j$) {
       }
 
       if (asymmetricB) {
-        result = b.asymmetricMatch(a, customTesters, matchersUtil);
+        result = b.asymmetricMatch(a, matchersUtil);
         if (!result) {
           diffBuilder.record(a, b);
         }
