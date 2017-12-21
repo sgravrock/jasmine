@@ -126,9 +126,12 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     var expectationFactory = function(actual, spec) {
+      var customEqualityTesters = runnableResources[spec.id].customEqualityTesters;
+
       return j$.Expectation.Factory({
-        util: j$.matchersUtil,
-        customEqualityTesters: runnableResources[spec.id].customEqualityTesters,
+        util: j$.matchersUtilFactory(customEqualityTesters),
+        // TODO: still needed?
+        customEqualityTesters: customEqualityTesters,
         customMatchers: runnableResources[spec.id].customMatchers,
         actual: actual,
         addExpectationResult: addExpectationResult

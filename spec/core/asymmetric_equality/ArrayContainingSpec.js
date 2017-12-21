@@ -16,19 +16,19 @@ describe("ArrayContaining", function() {
   it("matches when the item is in the actual", function() {
     var containing = new jasmineUnderTest.ArrayContaining(["foo"]);
 
-    expect(containing.asymmetricMatch(["foo"], [], jasmineUnderTest.matchersUtil)).toBe(true);
+    expect(containing.asymmetricMatch(["foo"], [], jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
   });
 
   it("matches when additional items are in the actual", function() {
     var containing = new jasmineUnderTest.ArrayContaining(["foo"]);
 
-    expect(containing.asymmetricMatch(["foo", "bar"], [], jasmineUnderTest.matchersUtil)).toBe(true);
+    expect(containing.asymmetricMatch(["foo", "bar"], [], jasmineUnderTest.matchersUtilFactory([]))).toBe(true);
   });
 
   it("does not match when the item is not in the actual", function() {
     var containing = new jasmineUnderTest.ArrayContaining(["foo"]);
 
-    expect(containing.asymmetricMatch(["bar"], [], jasmineUnderTest.matchersUtil)).toBe(false);
+    expect(containing.asymmetricMatch(["bar"], [], jasmineUnderTest.matchersUtilFactory([]))).toBe(false);
   });
 
   it("jasmineToStrings itself", function() {
@@ -47,6 +47,6 @@ describe("ArrayContaining", function() {
     };
     var containing = new jasmineUnderTest.ArrayContaining(["fooVal"]);
 
-    expect(containing.asymmetricMatch(["fooBar"], [tester], jasmineUnderTest.matchersUtil)).toBe(true);
+    expect(containing.asymmetricMatch(["fooBar"], [tester], jasmineUnderTest.matchersUtilFactory([tester]))).toBe(true);
   });
 });

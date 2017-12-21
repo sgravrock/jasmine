@@ -2,7 +2,7 @@ describe("toEqual", function() {
   "use strict";
 
   function compareEquals(actual, expected) {
-    var util = jasmineUnderTest.matchersUtil,
+    var util = jasmineUnderTest.matchersUtilFactory([]),
       matcher = jasmineUnderTest.matchers.toEqual(util);
 
     var result = matcher.compare(actual, expected);
@@ -16,7 +16,7 @@ describe("toEqual", function() {
         buildFailureMessage: function() {
           return 'does not matter'
         },
-        DiffBuilder: jasmineUnderTest.matchersUtil.DiffBuilder
+        DiffBuilder: jasmineUnderTest.DiffBuilder
       },
       matcher = jasmineUnderTest.matchers.toEqual(util),
       result;
@@ -33,7 +33,7 @@ describe("toEqual", function() {
         buildFailureMessage: function() {
           return 'does not matter'
         },
-        DiffBuilder: jasmineUnderTest.matchersUtil.DiffBuilder
+        DiffBuilder: jasmineUnderTest.DiffBuilder
       },
       customEqualityTesters = ['a', 'b'],
       matcher = jasmineUnderTest.matchers.toEqual(util, customEqualityTesters),
