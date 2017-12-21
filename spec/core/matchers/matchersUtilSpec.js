@@ -166,7 +166,7 @@ describe("matchersUtil", function() {
 
       expect(jasmineUnderTest.matchersUtilFactory([]).equals(a,b)).toBe(true);
     });
-    
+
     it("passes for equivalent Promises (GitHub issue #1314)", function() {
       if (typeof Promise === 'undefined') { return; }
 
@@ -316,28 +316,28 @@ describe("matchersUtil", function() {
       expect(jasmineUnderTest.matchersUtilFactory([]).equals(arr, new jasmineUnderTest.ArrayContaining(["bar"]))).toBe(true);
     });
 
-    it("passes when a custom equality matcher returns true", function() {
+    it("passes when a custom equality tester returns true", function() {
       var tester = function(a, b) { return true; };
 
-      expect(jasmineUnderTest.matchersUtilFactory([]).equals(1, 2, [tester])).toBe(true);
+      expect(jasmineUnderTest.matchersUtilFactory([tester]).equals(1, 2)).toBe(true);
     });
 
     it("passes for two empty Objects", function () {
       expect(jasmineUnderTest.matchersUtilFactory([]).equals({}, {})).toBe(true);
     });
 
-    describe("when a custom equality matcher is installed that returns 'undefined'", function () {
+    describe("when a custom equality tester is installed that returns 'undefined'", function () {
       var tester = function(a, b) { return jasmine.undefined; };
 
       it("passes for two empty Objects", function () {
-        expect(jasmineUnderTest.matchersUtilFactory([]).equals({}, {}, [tester])).toBe(true);
+        expect(jasmineUnderTest.matchersUtilFactory([tester]).equals({}, {})).toBe(true);
       });
     });
 
-    it("fails for equivalents when a custom equality matcher returns false", function() {
+    it("fails for equivalents when a custom equality tester returns false", function() {
       var tester = function(a, b) { return false; };
 
-      expect(jasmineUnderTest.matchersUtilFactory([]).equals(1, 1, [tester])).toBe(false);
+      expect(jasmineUnderTest.matchersUtilFactory([tester]).equals(1, 1)).toBe(false);
     });
 
     it("passes for an asymmetric equality tester that returns true when a custom equality tester return false", function() {
@@ -348,14 +348,14 @@ describe("matchersUtil", function() {
       expect(jasmineUnderTest.matchersUtilFactory([]).equals(true, asymmetricTester, [symmetricTester])).toBe(true);
     });
 
-    it("passes itself and equality matchers to asymmetric equality testers", function() {
+    it("passes itself and equality testers to asymmetric equality testers", function() {
       var tester = function(a, b) {};
       var asymmetricTester = { asymmetricMatch: jasmine.createSpy('asymmetricMatch') };
       asymmetricTester.asymmetricMatch.and.returnValue(true);
       var other = {};
       var subject = jasmineUnderTest.matchersUtilFactory([tester]);
 
-      expect(subject.equals(asymmetricTester, other, [tester])).toBe(true);
+      expect(subject.equals(asymmetricTester, other)).toBe(true);
       expect(asymmetricTester.asymmetricMatch).toHaveBeenCalledWith(other, [tester], subject);
     });
 

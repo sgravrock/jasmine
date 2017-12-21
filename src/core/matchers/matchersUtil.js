@@ -6,7 +6,7 @@ getJasmineRequireObj().matchersUtilFactory = function(j$) {
     var matchersUtil = {
       equals: equals,
 
-      contains: function(haystack, needle, customTesters) {
+      contains: function(haystack, needle, ignored) {
 
         if ((Object.prototype.toString.apply(haystack) === '[object Set]')) {
           return haystack.has(needle);
@@ -57,7 +57,7 @@ getJasmineRequireObj().matchersUtilFactory = function(j$) {
       return obj && j$.isA_('Function', obj.asymmetricMatch);
     }
 
-    function asymmetricMatch(a, b, customTesters, diffBuilder) {
+    function asymmetricMatch(a, b, ignored, diffBuilder) {
       var asymmetricA = isAsymmetric(a),
           asymmetricB = isAsymmetric(b),
           result;
@@ -83,8 +83,7 @@ getJasmineRequireObj().matchersUtilFactory = function(j$) {
       }
     }
 
-    function equals(a, b, customTesters, diffBuilder) {
-      customTesters = customTesters || [];
+    function equals(a, b, ignored, diffBuilder) {
       diffBuilder = diffBuilder || j$.NullDiffBuilder();
 
       return eq(a, b, [], [], customTesters, diffBuilder);
