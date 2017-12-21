@@ -1,7 +1,7 @@
 getJasmineRequireObj().matchersUtil = function(j$) {
   // TODO: what to do about jasmine.pp not being inject? move to JSON.stringify? gut PrettyPrinter?
 
-  return {
+  var matchersUtil = {
     equals: equals,
 
     contains: function(haystack, needle, customTesters) {
@@ -50,6 +50,7 @@ getJasmineRequireObj().matchersUtil = function(j$) {
       return message + '.';
     }
   };
+   return matchersUtil;
 
   function isAsymmetric(obj) {
     return obj && j$.isA_('Function', obj.asymmetricMatch);
@@ -65,7 +66,7 @@ getJasmineRequireObj().matchersUtil = function(j$) {
     }
 
     if (asymmetricA) {
-      result = a.asymmetricMatch(b, customTesters);
+      result = a.asymmetricMatch(b, customTesters, matchersUtil);
       if (!result) {
         diffBuilder.record(a, b);
       }
@@ -73,7 +74,7 @@ getJasmineRequireObj().matchersUtil = function(j$) {
     }
 
     if (asymmetricB) {
-      result = b.asymmetricMatch(a, customTesters);
+      result = b.asymmetricMatch(a, customTesters, matchersUtil);
       if (!result) {
         diffBuilder.record(a, b);
       }

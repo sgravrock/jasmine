@@ -348,14 +348,14 @@ describe("matchersUtil", function() {
       expect(jasmineUnderTest.matchersUtil.equals(true, asymmetricTester, [symmetricTester])).toBe(true);
     });
 
-    it("passes custom equality matchers to asymmetric equality testers", function() {
+    it("passes itself and equality matchers to asymmetric equality testers", function() {
       var tester = function(a, b) {};
       var asymmetricTester = { asymmetricMatch: jasmine.createSpy('asymmetricMatch') };
       asymmetricTester.asymmetricMatch.and.returnValue(true);
       var other = {};
 
       expect(jasmineUnderTest.matchersUtil.equals(asymmetricTester, other, [tester])).toBe(true);
-      expect(asymmetricTester.asymmetricMatch).toHaveBeenCalledWith(other, [tester]);
+      expect(asymmetricTester.asymmetricMatch).toHaveBeenCalledWith(other, [tester], jasmineUnderTest.matchersUtil);
     });
 
     it("passes when an Any is compared to an Any that checks for the same type", function() {
