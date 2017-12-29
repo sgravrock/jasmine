@@ -113,6 +113,12 @@ getJasmineRequireObj().Env = function(j$) {
       }
     };
 
+    this.addMatcher = function(name, matcher) {
+      var customMatchers = runnableResources[currentRunnable().id].customMatchers;
+      customMatchers[name] = matcher;
+      matcher.isNewStyle = true;
+    };
+
     j$.Expectation.addCoreMatchers(j$.matchers);
 
     var nextSpecId = 0;

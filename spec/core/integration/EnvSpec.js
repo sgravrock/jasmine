@@ -1791,7 +1791,7 @@ describe("Env integration", function() {
     env.execute();
   });
 
-  it("Custom matchers should be per spec", function(done) {
+  it("Old style custom matchers should be per spec", function(done) {
     var env = new jasmineUnderTest.Env({global: { setTimeout: setTimeout }}),
         matchers = {
           toFoo: function() {}

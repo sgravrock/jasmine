@@ -18,6 +18,70 @@ getJasmineRequireObj().Expectation = function() {
   }
 
   Expectation.prototype.wrapCompare = function(name, matcherFactory) {
+    if (matcherFactory.isNewStyle) {
+      return newStyleWrapCompare(name, matcherFactory);
+    }
+
+    return oldStyleWrapCompare(name, matcherFactory);
+  };
+
+  function newStyleWrapCompare(name, matcher) {
+    return function() {
+      var args = Array.prototype.slice.call(arguments, 0),
+        expected = args.slice(0),
+        message = '';
+
+      args.unshift(this.actual);
+      args.unshift(this.util);
+
+      var matcherCompare = typeof matcher === 'function' ? matcher : matcher.compare;
+
+      function defaultNegativeCompare() {
+        var result = matcherCompare.apply(null, args);
+        result.pass = !result.pass;
+        return result;
+      }
+
+      if (this.isNot) {
+        matcherCompare = matcher.negativeCompare || defaultNegativeCompare;
+      }
+
+      var result = matcherCompare.apply(null, args);
+
+      if (!result.pass) {
+        if (!result.message) {
+          args.unshift(this.isNot);
+          args.unshift(name);
+          message = this.util.buildFailureMessage.apply(null, args);
+        } else {
+          if (Object.prototype.toString.apply(result.message) === '[object Function]') {
+            message = result.message();
+          } else {
+            message = result.message;
+          }
+        }
+      }
+
+      if (expected.length == 1) {
+        expected = expected[0];
+      }
+
+      // TODO: how many of these params are needed?
+      this.addExpectationResult(
+        result.pass,
+        {
+          matcherName: name,
+          passed: result.pass,
+          message: message,
+          error: result.error,
+          actual: this.actual,
+          expected: expected // TODO: this may need to be arrayified/sliced
+        }
+      );
+    };
+  };
+
+  function oldStyleWrapCompare(name, matcherFactory) {
     return function() {
       var args = Array.prototype.slice.call(arguments, 0),
         expected = args.slice(0),
