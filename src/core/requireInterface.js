@@ -264,6 +264,18 @@ getJasmineRequireObj().interface = function(jasmine, env) {
       return env.spyOnAllFunctions(obj);
     },
 
+    /**
+     * Installs a global error spy for the duration of the current spec
+     * @name spyOnGlobalErrors
+     * @since 3.5.0
+     * @function
+     * @global
+     * @returns {GlobalErrorSpy}
+     */
+    spyOnGlobalErrors: function() {
+      return env.spyOnGlobalErrors();
+    },
+
     jsApiReporter: new jasmine.JsApiReporter({
       timer: new jasmine.Timer()
     }),
