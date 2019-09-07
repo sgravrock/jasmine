@@ -1,4 +1,6 @@
+console.log("*** requireInterface loaded")
 getJasmineRequireObj().interface = function(jasmine, env) {
+  console.log("*** requireInterface called")
   var jasmineInterface = {
     /**
      * Callback passed to parts of the Jasmine base interface.

@@ -886,6 +886,8 @@ describe("Env integration", function() {
     env.execute();
   });
 
+  it('removes global error spies after the spec is completed');
+
   it('removes all spies added in a suite after the suite is complete', function(done) {
     var env = new jasmineUnderTest.Env(),
       originalFoo = function() {},

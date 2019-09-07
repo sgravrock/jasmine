@@ -70,10 +70,12 @@ getJasmineRequireObj().GlobalErrors = function(j$) {
     };
 
     this.pushListener = function pushListener(listener) {
+      console.log("pushListener");
       handlers.push(listener);
     };
 
     this.popListener = function popListener() {
+      console.log("popListener")
       handlers.pop();
     };
   }

@@ -28,7 +28,8 @@ getJasmineRequireObj().requireMatchers = function(jRequire, j$) {
       'toMatch',
       'toThrow',
       'toThrowError',
-      'toThrowMatching'
+      'toThrowMatching',
+      'toHaveReceivedGlobalError'
     ],
     matchers = {};
 

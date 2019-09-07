@@ -313,6 +313,10 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     var clearResourcesForRunnable = function(id) {
+      if (runnableResources[id].globalErrorSpy) {
+        runnableResources[id].globalErrorSpy.uninstall();
+      }
+
       spyRegistry.clearSpies();
       delete runnableResources[id];
     };
@@ -792,6 +796,13 @@ getJasmineRequireObj().Env = function(j$) {
       return spyFactory.createSpyObj(baseName, methodNames, propertyNames);
     };
 
+    this.spyOnGlobalErrors = function() {
+      // TODO throw if not in a spec
+      var globalErrorSpy = new j$.GlobalErrorSpy(globalErrors);
+      runnableResources[currentRunnable().id].globalErrorSpy = globalErrorSpy;
+      return globalErrorSpy;
+    };
+
     var ensureIsFunction = function(fn, caller) {
       if (!j$.isFunction_(fn)) {
         throw new Error(
@@ -940,6 +951,7 @@ getJasmineRequireObj().Env = function(j$) {
       return spec;
 
       function specResultCallback(result, next) {
+        debugger;
         clearResourcesForRunnable(spec.id);
         currentSpec = null;
 
