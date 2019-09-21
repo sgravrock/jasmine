@@ -382,11 +382,18 @@ describe("matchersUtil", function() {
       expect(matchersUtil.equals(arr, new jasmineUnderTest.ArrayContaining(["bar"]))).toBe(true);
     });
 
-    it("passes when a custom equality matcher returns true", function() {
+    it("passes when a custom equality matcher passed to equals returns true", function() {
       var tester = function(a, b) { return true; },
         matchersUtil = new jasmineUnderTest.MatchersUtil();
 
       expect(matchersUtil.equals(1, 2, [tester])).toBe(true);
+    });
+
+    it("passes when a custom equality matcher passed to the constructor returns true", function() {
+      var tester = function(a, b) { return true; },
+        matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+
+      expect(matchersUtil.equals(1, 2)).toBe(true);
     });
 
     it("passes for two empty Objects", function () {
@@ -394,7 +401,7 @@ describe("matchersUtil", function() {
       expect(matchersUtil.equals({}, {})).toBe(true);
     });
 
-    describe("when a custom equality matcher is installed that returns 'undefined'", function () {
+    describe("when a custom equality matcher is passed to equals that returns 'undefined'", function () {
       var tester = function(a, b) { return jasmine.undefined; };
 
       it("passes for two empty Objects", function () {
@@ -403,14 +410,30 @@ describe("matchersUtil", function() {
       });
     });
 
-    it("fails for equivalents when a custom equality matcher returns false", function() {
+    describe("when a custom equality matcher is passed to the constructor that returns 'undefined'", function () {
+      var tester = function(a, b) { return jasmine.undefined; };
+
+      it("passes for two empty Objects", function () {
+        var matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+        expect(matchersUtil.equals({}, {})).toBe(true);
+      });
+    });
+
+    it("fails for equivalents when a custom equality matcher passed to equals returns false", function() {
       var tester = function(a, b) { return false; },
         matchersUtil = new jasmineUnderTest.MatchersUtil();
 
       expect(matchersUtil.equals(1, 1, [tester])).toBe(false);
     });
 
-    it("passes for an asymmetric equality tester that returns true when a custom equality tester return false", function() {
+    it("fails for equivalents when a custom equality matcher passed to the constructor returns false", function() {
+      var tester = function(a, b) { return false; },
+        matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+
+      expect(matchersUtil.equals(1, 1)).toBe(false);
+    });
+
+    it("passes for an asymmetric equality tester that returns true when a custom equality tester passed to equals return false", function() {
       var asymmetricTester = { asymmetricMatch: function(other) { return true; } },
         symmetricTester = function(a, b) { return false; },
         matchersUtil = new jasmineUnderTest.MatchersUtil();
@@ -419,7 +442,16 @@ describe("matchersUtil", function() {
       expect(matchersUtil.equals(true, asymmetricTester, [symmetricTester])).toBe(true);
     });
 
-    it("passes custom equality matchers to asymmetric equality testers", function() {
+    it("passes for an asymmetric equality tester that returns true when a custom equality tester passed to the constructor return false", function() {
+      var asymmetricTester = { asymmetricMatch: function(other) { return true; } },
+        symmetricTester = function(a, b) { return false; },
+        matchersUtil = new jasmineUnderTest.MatchersUtil([symmetricTester()]);
+
+      expect(matchersUtil.equals(asymmetricTester, true)).toBe(true);
+      expect(matchersUtil.equals(true, asymmetricTester)).toBe(true);
+    });
+
+    it("passes custom equality matchers from equals to asymmetric equality testers", function() {
       var tester = function(a, b) {};
       var asymmetricTester = { asymmetricMatch: jasmine.createSpy('asymmetricMatch') };
       asymmetricTester.asymmetricMatch.and.returnValue(true);
@@ -427,6 +459,17 @@ describe("matchersUtil", function() {
       var matchersUtil = new jasmineUnderTest.MatchersUtil();
 
       expect(matchersUtil.equals(asymmetricTester, other, [tester])).toBe(true);
+      expect(asymmetricTester.asymmetricMatch).toHaveBeenCalledWith(other, [tester]);
+    });
+
+    it("passes custom equality matchers from the constructor to asymmetric equality testers", function() {
+      var tester = function(a, b) {};
+      var asymmetricTester = { asymmetricMatch: jasmine.createSpy('asymmetricMatch') };
+      asymmetricTester.asymmetricMatch.and.returnValue(true);
+      var other = {};
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+
+      expect(matchersUtil.equals(asymmetricTester, other)).toBe(true);
       expect(asymmetricTester.asymmetricMatch).toHaveBeenCalledWith(other, [tester]);
     });
 
@@ -689,11 +732,18 @@ describe("matchersUtil", function() {
       expect(matchersUtil.contains(["foo", {some: "bar"}], {some: "bar"})).toBe(true);
     });
 
-    it("uses custom equality testers if passed in and actual is an Array", function() {
+    it("uses custom equality testers if passed to contains and actual is an Array", function() {
       var customTester = function(a, b) {return true;},
         matchersUtil = new jasmineUnderTest.MatchersUtil();
 
       expect(matchersUtil.contains([1, 2], 3, [customTester])).toBe(true);
+    });
+
+    it("uses custom equality testers if passed to the constructor and actual is an Array", function() {
+      var customTester = function(a, b) {return true;},
+        matchersUtil = new jasmineUnderTest.MatchersUtil([customTester]);
+
+      expect(matchersUtil.contains([1, 2], 3)).toBe(true);
     });
 
     it("fails when actual is undefined", function() {

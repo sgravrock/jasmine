@@ -1,13 +1,17 @@
 getJasmineRequireObj().MatchersUtil = function(j$) {
   // TODO: what to do about jasmine.pp not being inject? move to JSON.stringify? gut PrettyPrinter?
 
-  function MatchersUtil() {
+  function MatchersUtil(customTesters) {
+    this.customTesters_ = customTesters;
   };
 
-  MatchersUtil.prototype.equals = equals;
+  MatchersUtil.prototype.equals = function(a, b, customTesters, diffBuilder) {
+    customTesters = customTesters || this.customTesters_;
+    return equals(a, b, customTesters, diffBuilder);
+  };
 
   MatchersUtil.prototype.contains = function(haystack, needle, customTesters) {
-    customTesters = customTesters || [];
+    customTesters = customTesters || this.customTesters_ || [];
 
     if (j$.isSet(haystack)) {
       return haystack.has(needle);
