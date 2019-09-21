@@ -1,54 +1,55 @@
-getJasmineRequireObj().matchersUtil = function(j$) {
+getJasmineRequireObj().MatchersUtil = function(j$) {
   // TODO: what to do about jasmine.pp not being inject? move to JSON.stringify? gut PrettyPrinter?
 
-  return {
-    equals: equals,
+  function MatchersUtil() {
+  };
 
-    contains: function(haystack, needle, customTesters) {
-      customTesters = customTesters || [];
+  MatchersUtil.prototype.equals = equals;
 
-      if (j$.isSet(haystack)) {
-        return haystack.has(needle);
-      }
+  MatchersUtil.prototype.contains = function(haystack, needle, customTesters) {
+    customTesters = customTesters || [];
 
-      if ((Object.prototype.toString.apply(haystack) === '[object Array]') ||
-        (!!haystack && !haystack.indexOf))
-      {
-        for (var i = 0; i < haystack.length; i++) {
-          if (equals(haystack[i], needle, customTesters)) {
-            return true;
-          }
-        }
-        return false;
-      }
-
-      return !!haystack && haystack.indexOf(needle) >= 0;
-    },
-
-    buildFailureMessage: function() {
-      var args = Array.prototype.slice.call(arguments, 0),
-        matcherName = args[0],
-        isNot = args[1],
-        actual = args[2],
-        expected = args.slice(3),
-        englishyPredicate = matcherName.replace(/[A-Z]/g, function(s) { return ' ' + s.toLowerCase(); });
-
-      var message = 'Expected ' +
-        j$.pp(actual) +
-        (isNot ? ' not ' : ' ') +
-        englishyPredicate;
-
-      if (expected.length > 0) {
-        for (var i = 0; i < expected.length; i++) {
-          if (i > 0) {
-            message += ',';
-          }
-          message += ' ' + j$.pp(expected[i]);
-        }
-      }
-
-      return message + '.';
+    if (j$.isSet(haystack)) {
+      return haystack.has(needle);
     }
+
+    if ((Object.prototype.toString.apply(haystack) === '[object Array]') ||
+      (!!haystack && !haystack.indexOf))
+    {
+      for (var i = 0; i < haystack.length; i++) {
+        if (equals(haystack[i], needle, customTesters)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    return !!haystack && haystack.indexOf(needle) >= 0;
+  };
+
+  MatchersUtil.prototype.buildFailureMessage = function() {
+    var args = Array.prototype.slice.call(arguments, 0),
+      matcherName = args[0],
+      isNot = args[1],
+      actual = args[2],
+      expected = args.slice(3),
+      englishyPredicate = matcherName.replace(/[A-Z]/g, function(s) { return ' ' + s.toLowerCase(); });
+
+    var message = 'Expected ' +
+      j$.pp(actual) +
+      (isNot ? ' not ' : ' ') +
+      englishyPredicate;
+
+    if (expected.length > 0) {
+      for (var i = 0; i < expected.length; i++) {
+        if (i > 0) {
+          message += ',';
+        }
+        message += ' ' + j$.pp(expected[i]);
+      }
+    }
+
+    return message + '.';
   };
 
   function isAsymmetric(obj) {
@@ -467,4 +468,6 @@ getJasmineRequireObj().matchersUtil = function(j$) {
     }
     return formatted;
   }
+
+  return MatchersUtil;
 };
