@@ -2,6 +2,10 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
   // TODO: what to do about jasmine.pp not being inject? move to JSON.stringify? gut PrettyPrinter?
 
   function MatchersUtil(customTesters) {
+    if (!j$.isArray_(customTesters)) {
+      throw new Error("MatchersUtil requires custom equality testers");
+    }
+
     this.customTesters_ = customTesters;
   };
 
