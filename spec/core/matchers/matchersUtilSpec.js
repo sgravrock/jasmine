@@ -451,26 +451,36 @@ describe("matchersUtil", function() {
       expect(matchersUtil.equals(true, asymmetricTester)).toBe(true);
     });
 
-    it("passes custom equality matchers from equals to asymmetric equality testers", function() {
-      var tester = function(a, b) {};
-      var asymmetricTester = { asymmetricMatch: jasmine.createSpy('asymmetricMatch') };
-      asymmetricTester.asymmetricMatch.and.returnValue(true);
-      var other = {};
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    describe("The compatibility shim passed to asymmetric equality testers", function() {
+      describe("When equals is called with custom equality testers", function() {
+        it("is both a matchersUtil and the custom equality testers passed to equals", function() {
+          var asymmetricTester = jasmine.createSpyObj('tester', ['asymmetricMatch']),
+            symmetricTester = function() { } ,
+            matchersUtil = new jasmineUnderTest.MatchersUtil([]),
+            shim;
 
-      expect(matchersUtil.equals(asymmetricTester, other, [tester])).toBe(true);
-      expect(asymmetricTester.asymmetricMatch).toHaveBeenCalledWith(other, [tester]);
-    });
+          matchersUtil.equals(true, asymmetricTester, [symmetricTester]);
+          shim = asymmetricTester.asymmetricMatch.calls.argsFor(0)[1];
+          expect(shim).toEqual(jasmine.any(jasmineUnderTest.MatchersUtil));
+          expect(shim.length).toEqual(1);
+          expect(shim[0]).toEqual(symmetricTester);
+        });
+      });
 
-    it("passes custom equality matchers from the constructor to asymmetric equality testers", function() {
-      var tester = function(a, b) {};
-      var asymmetricTester = { asymmetricMatch: jasmine.createSpy('asymmetricMatch') };
-      asymmetricTester.asymmetricMatch.and.returnValue(true);
-      var other = {};
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+      describe("When equals is called with custom equality testers", function() {
+        it("is both a matchersUtil and the custom equality testers passed to the constructor", function() {
+          var asymmetricTester = jasmine.createSpyObj('tester', ['asymmetricMatch']),
+            symmetricTester = function() { } ,
+            matchersUtil = new jasmineUnderTest.MatchersUtil([symmetricTester]),
+            shim;
 
-      expect(matchersUtil.equals(asymmetricTester, other)).toBe(true);
-      expect(asymmetricTester.asymmetricMatch).toHaveBeenCalledWith(other, [tester]);
+          matchersUtil.equals(true, asymmetricTester);
+          shim = asymmetricTester.asymmetricMatch.calls.argsFor(0)[1];
+          expect(shim).toEqual(jasmine.any(jasmineUnderTest.MatchersUtil));
+          expect(shim.length).toEqual(1);
+          expect(shim[0]).toEqual(symmetricTester);
+        });
+      });
     });
 
     it("passes when an Any is compared to an Any that checks for the same type", function() {

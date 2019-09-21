@@ -9,9 +9,10 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
     this.customTesters_ = customTesters;
   };
 
+  // TODO flatten this out
   MatchersUtil.prototype.equals = function(a, b, customTesters, diffBuilder) {
     customTesters = customTesters || this.customTesters_;
-    return equals(a, b, customTesters, diffBuilder);
+    return this.equals_(a, b, customTesters, diffBuilder);
   };
 
   MatchersUtil.prototype.contains = function(haystack, needle, customTesters) {
@@ -25,7 +26,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
       (!!haystack && !haystack.indexOf))
     {
       for (var i = 0; i < haystack.length; i++) {
-        if (equals(haystack[i], needle, customTesters)) {
+        if (this.equals_(haystack[i], needle, customTesters)) {
           return true;
         }
       }
@@ -64,9 +65,10 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
     return obj && j$.isA_('Function', obj.asymmetricMatch);
   }
 
-  function asymmetricMatch(a, b, customTesters, diffBuilder) {
+  MatchersUtil.prototype.asymmetricMatch_ = function(a, b, customTesters, diffBuilder) {
     var asymmetricA = isAsymmetric(a),
         asymmetricB = isAsymmetric(b),
+        shim = j$.asymmetricEqualityTesterArgCompatShim(this, customTesters),
         result;
 
     if (asymmetricA && asymmetricB) {
@@ -74,7 +76,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
     }
 
     if (asymmetricA) {
-      result = a.asymmetricMatch(b, customTesters);
+      result = a.asymmetricMatch(b, shim);
       if (!result) {
         diffBuilder.record(a, b);
       }
@@ -82,27 +84,27 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
     }
 
     if (asymmetricB) {
-      result = b.asymmetricMatch(a, customTesters);
+      result = b.asymmetricMatch(a, shim);
       if (!result) {
         diffBuilder.record(a, b);
       }
       return result;
     }
-  }
+  };
 
-  function equals(a, b, customTesters, diffBuilder) {
+  MatchersUtil.prototype.equals_ = function(a, b, customTesters, diffBuilder) {
     customTesters = customTesters || [];
     diffBuilder = diffBuilder || j$.NullDiffBuilder();
 
-    return eq(a, b, [], [], customTesters, diffBuilder);
-  }
+    return this.eq_(a, b, [], [], customTesters, diffBuilder);
+  };
 
   // Equality function lovingly adapted from isEqual in
   //   [Underscore](http://underscorejs.org)
-  function eq(a, b, aStack, bStack, customTesters, diffBuilder) {
-    var result = true, i;
+  MatchersUtil.prototype.eq_ = function(a, b, aStack, bStack, customTesters, diffBuilder) {
+    var result = true, self = this, i;
 
-    var asymmetricResult = asymmetricMatch(a, b, customTesters, diffBuilder);
+    var asymmetricResult = this.asymmetricMatch_(a, b, customTesters, diffBuilder);
     if (!j$.util.isUndefined(asymmetricResult)) {
       return asymmetricResult;
     }
@@ -239,7 +241,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
             diffBuilder.record(a[i], void 0, actualArrayIsLongerFormatter);
             result = false;
           } else {
-            result = eq(i < aLength ? a[i] : void 0, i < bLength ? b[i] : void 0, aStack, bStack, customTesters, diffBuilder) && result;
+            result = self.eq_(i < aLength ? a[i] : void 0, i < bLength ? b[i] : void 0, aStack, bStack, customTesters, diffBuilder) && result;
           }
         });
       }
@@ -280,12 +282,12 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
           // otherwise explicitly look up the mapKey in the other Map since we want keys with unique
           // obj identity (that are otherwise equal) to not match.
           if (isAsymmetric(mapKey) || isAsymmetric(cmpKey) &&
-              eq(mapKey, cmpKey, aStack, bStack, customTesters, j$.NullDiffBuilder())) {
+              this.eq_(mapKey, cmpKey, aStack, bStack, customTesters, j$.NullDiffBuilder())) {
             mapValueB = b.get(cmpKey);
           } else {
             mapValueB = b.get(mapKey);
           }
-          result = eq(mapValueA, mapValueB, aStack, bStack, customTesters, j$.NullDiffBuilder());
+          result = this.eq_(mapValueA, mapValueB, aStack, bStack, customTesters, j$.NullDiffBuilder());
         }
       }
 
@@ -329,7 +331,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
             otherValue = otherValues[l];
             prevStackSize = baseStack.length;
             // compare by value equality
-            found = eq(baseValue, otherValue, baseStack, otherStack, customTesters, j$.NullDiffBuilder());
+            found = this.eq_(baseValue, otherValue, baseStack, otherStack, customTesters, j$.NullDiffBuilder());
             if (!found && prevStackSize !== baseStack.length) {
               baseStack.splice(prevStackSize);
               otherStack.splice(prevStackSize);
@@ -378,7 +380,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
       }
 
       diffBuilder.withPath(key, function() {
-        if(!eq(a[key], b[key], aStack, bStack, customTesters, diffBuilder)) {
+        if(!self.eq_(a[key], b[key], aStack, bStack, customTesters, diffBuilder)) {
           result = false;
         }
       });
@@ -393,7 +395,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
     bStack.pop();
 
     return result;
-  }
+  };
 
   function keys(obj, isArray) {
     var allKeys = Object.keys ? Object.keys(obj) :

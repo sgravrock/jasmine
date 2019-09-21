@@ -51,6 +51,9 @@ var getJasmineRequireObj = (function(jasmineGlobal) {
     j$.buildExpectationResult = jRequire.buildExpectationResult();
     j$.noopTimer = jRequire.noopTimer();
     j$.JsApiReporter = jRequire.JsApiReporter(j$);
+    j$.asymmetricEqualityTesterArgCompatShim = jRequire.asymmetricEqualityTesterArgCompatShim(
+      j$
+    );
     j$.MatchersUtil = jRequire.MatchersUtil(j$);
     j$.matchersUtil = new j$.MatchersUtil([]); // TODO: deprecate this
     j$.ObjectContaining = jRequire.ObjectContaining(j$);
