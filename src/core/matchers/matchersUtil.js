@@ -9,12 +9,6 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
     this.customTesters_ = customTesters;
   };
 
-  // TODO flatten this out
-  MatchersUtil.prototype.equals = function(a, b, customTesters, diffBuilder) {
-    customTesters = customTesters || this.customTesters_;
-    return this.equals_(a, b, customTesters, diffBuilder);
-  };
-
   MatchersUtil.prototype.contains = function(haystack, needle, customTesters) {
     customTesters = customTesters || this.customTesters_ || [];
 
@@ -26,7 +20,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
       (!!haystack && !haystack.indexOf))
     {
       for (var i = 0; i < haystack.length; i++) {
-        if (this.equals_(haystack[i], needle, customTesters)) {
+        if (this.equals(haystack[i], needle, customTesters)) {
           return true;
         }
       }
@@ -92,8 +86,8 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
     }
   };
 
-  MatchersUtil.prototype.equals_ = function(a, b, customTesters, diffBuilder) {
-    customTesters = customTesters || [];
+  MatchersUtil.prototype.equals = function(a, b, customTesters, diffBuilder) {
+    customTesters = customTesters || this.customTesters_;
     diffBuilder = diffBuilder || j$.NullDiffBuilder();
 
     return this.eq_(a, b, [], [], customTesters, diffBuilder);
