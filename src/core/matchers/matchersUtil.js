@@ -86,7 +86,17 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
     }
   };
 
-  MatchersUtil.prototype.equals = function(a, b, customTesters, diffBuilder) {
+  MatchersUtil.prototype.equals = function(a, b, customTestersOrDiffBuilder, diffBuilderOrNothing) {
+    var customTesters, diffBuilder;
+
+    if (isDiffBuilder(customTestersOrDiffBuilder)) {
+      diffBuilder = customTestersOrDiffBuilder;
+    } else {
+      // TODO: deprecate this form
+      customTesters = customTestersOrDiffBuilder;
+      diffBuilder = diffBuilderOrNothing;
+    }
+
     customTesters = customTesters || this.customTesters_;
     diffBuilder = diffBuilder || j$.NullDiffBuilder();
 
@@ -471,6 +481,10 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
       formatted += '\n    ' + key + ': ' + j$.pp(obj[key]);
     }
     return formatted;
+  }
+
+  function isDiffBuilder(obj) {
+    return obj && typeof obj.record === 'function';
   }
 
   return MatchersUtil;
