@@ -47,7 +47,7 @@ getJasmineRequireObj().toHaveBeenCalledWith = function(j$) {
 
             var diffs = actual.calls.allArgs().map(function(argsForCall, callIx) {
             var diffBuilder = new j$.DiffBuilder();
-              util.equals(argsForCall, expectedArgs, null, diffBuilder);
+              util.equals(argsForCall, expectedArgs, diffBuilder);
               return 'Call ' + callIx + ':\n' +
                 diffBuilder.getMessage().replace(/^/mg, '  ');
             });

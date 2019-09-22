@@ -10,6 +10,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
   };
 
   MatchersUtil.prototype.contains = function(haystack, needle, customTesters) {
+    // TODO: deprecate the customTesters param
     customTesters = customTesters || this.customTesters_ || [];
 
     if (j$.isSet(haystack)) {

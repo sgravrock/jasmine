@@ -16,7 +16,7 @@ getJasmineRequireObj().toEqual = function(j$) {
           },
           diffBuilder = j$.DiffBuilder();
 
-        result.pass = util.equals(actual, expected, null, diffBuilder);
+        result.pass = util.equals(actual, expected, diffBuilder);
 
         // TODO: only set error message if test fails
         result.message = diffBuilder.getMessage();

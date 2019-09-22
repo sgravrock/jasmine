@@ -23,7 +23,7 @@ describe("toEqual", function() {
 
     result = matcher.compare(1, 1);
 
-    expect(util.equals).toHaveBeenCalledWith(1, 1, null, jasmine.anything());
+    expect(util.equals).toHaveBeenCalledWith(1, 1, jasmine.anything());
     expect(result.pass).toBe(true);
   });
 
