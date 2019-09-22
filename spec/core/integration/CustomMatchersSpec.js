@@ -83,6 +83,9 @@ describe("Custom Matchers (Integration)", function() {
 
   it("supports asymmetric equality testers that take a list of custom equality testers", function(done) {
     // TODO: remove this in the next major release.
+    spyOn(jasmineUnderTest, 'getEnv').and.returnValue(env);
+    spyOn(env, 'deprecated'); // suppress warnings
+
     env.it("spec using custom asymmetric equality tester", function() {
       var customEqualityFn = function(a, b) {
         if (a === 2 && b === "two") {

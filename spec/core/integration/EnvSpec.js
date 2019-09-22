@@ -2149,7 +2149,7 @@ describe("Env integration", function() {
         env.it('is a spec without any expectations', function() {
           // does nothing, just a mock spec without expectations
         });
-        
+
       });
 
       it('should report "failed" status if "failSpecWithNoExpectations" is enabled', function(done) {
@@ -2569,7 +2569,6 @@ describe("Env integration", function() {
       var arrayWithFirstElement = function(sample) {
         return {
           asymmetricMatch: function (actual, matchersUtil) {
-            debugger;
             return matchersUtil.equals(sample, actual[0]);
           }
         };
