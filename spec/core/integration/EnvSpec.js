@@ -2562,7 +2562,6 @@ describe("Env integration", function() {
 
     env.it("spec using custom asymmetric equality tester", function() {
       var customEqualityFn = function(a, b) {
-        console.log("CEF:", a, b);
         if (a === 2 && b === "two") {
           return true;
         }
@@ -2570,7 +2569,6 @@ describe("Env integration", function() {
       var arrayWithFirstElement = function(sample) {
         return {
           asymmetricMatch: function (actual, matchersUtil) {
-            console.log("AM:", sample, actual);
             debugger;
             return matchersUtil.equals(sample, actual[0]);
           }
