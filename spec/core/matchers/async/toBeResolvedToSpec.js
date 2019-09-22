@@ -56,7 +56,8 @@ describe('#toBeResolvedTo', function() {
     jasmine.getEnv().requirePromises();
 
     var customEqualityTesters = [function() { return true; }],
-      matcher = jasmineUnderTest.asyncMatchers.toBeResolvedTo(jasmineUnderTest.matchersUtil, customEqualityTesters),
+      matchersUtil = new jasmineUnderTest.MatchersUtil(customEqualityTesters),
+      matcher = jasmineUnderTest.asyncMatchers.toBeResolvedTo(matchersUtil),
       actual = Promise.resolve('actual');
 
     return matcher.compare(actual, 'expected').then(function(result) {

@@ -53,7 +53,8 @@ describe('#toBeRejectedWith', function () {
     jasmine.getEnv().requirePromises();
 
     var customEqualityTesters = [function() { return true; }],
-      matcher = jasmineUnderTest.asyncMatchers.toBeRejectedWith(jasmineUnderTest.matchersUtil, customEqualityTesters),
+      matchersUtil = new jasmineUnderTest.MatchersUtil(customEqualityTesters),
+      matcher = jasmineUnderTest.asyncMatchers.toBeRejectedWith(matchersUtil),
       actual = Promise.reject('actual');
 
     return matcher.compare(actual, 'expected').then(function(result) {
