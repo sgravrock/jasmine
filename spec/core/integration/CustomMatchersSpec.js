@@ -229,4 +229,34 @@ describe("Custom Matchers (Integration)", function() {
     env.addReporter({ specDone: specExpectations, jasmineDone: done });
     env.execute();
   });
+
+  it("provides custom equality testers to the matcher factory via matchersUtil", function (done) {
+    var matcherFactory = function (matchersUtil) {
+        return {
+          compare: function (actual, expected) {
+            return {pass: matchersUtil.equals(actual[0], expected)};
+          }
+        };
+      },
+      customEqualityFn = jasmine.createSpy("customEqualityFn").and.callFake(function (a, b) {
+        return a.toString() === b;
+      });
+
+    env.it("spec with expectation", function () {
+      env.addCustomEqualityTester(customEqualityFn);
+      env.addMatchers({
+        toBeArrayWithFirstElement: matcherFactory
+      });
+
+      env.expect([1, 2]).toBeArrayWithFirstElement("1");
+    });
+
+    var specExpectations = function (result) {
+      expect(customEqualityFn).toHaveBeenCalledWith(1, "1");
+      expect(result.failedExpectations).toEqual([]);
+    };
+
+    env.addReporter({specDone: specExpectations, jasmineDone: done});
+    env.execute();
+  });
 });
