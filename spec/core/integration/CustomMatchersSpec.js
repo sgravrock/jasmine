@@ -1,19 +1,19 @@
-describe("Custom Matchers (Integration)", function() {
+describe("Custom Matchers (Integration)", function () {
   var env;
   var fakeTimer;
 
-  beforeEach(function() {
+  beforeEach(function () {
     env = new jasmineUnderTest.Env();
     env.configure({random: false});
   });
 
-  it("allows adding more matchers local to a spec", function(done) {
-    env.it('spec defining a custom matcher', function() {
+  it("allows adding more matchers local to a spec", function (done) {
+    env.it('spec defining a custom matcher', function () {
       env.addMatchers({
-        matcherForSpec: function() {
+        matcherForSpec: function () {
           return {
-            compare: function(actual, expected) {
-              return { pass: false, message: "matcherForSpec: actual: " + actual + "; expected: " + expected };
+            compare: function (actual, expected) {
+              return {pass: false, message: "matcherForSpec: actual: " + actual + "; expected: " + expected};
             }
           }
         }
@@ -260,6 +260,28 @@ describe("Custom Matchers (Integration)", function() {
     };
 
     env.addReporter({specDone: specExpectations, jasmineDone: done});
+    env.execute();
+  });
+
+  it('logs a deprecation warning if the matcher factory takes two arguments', function(done) {
+    var matcherFactory = function (matchersUtil, customEqualityTesters) {
+      return { compare: function() {} };
+    };
+
+    spyOn(env, 'deprecated');
+
+    env.it('a spec', function() {
+      env.addMatchers({toBeFoo: matcherFactory});
+    });
+
+    function jasmineDone() {
+      expect(env.deprecated).toHaveBeenCalledWith('The matcher factory for "toBeFoo" ' +
+        'accepts custom equality testers, but this parameter will no longer be passed ' +
+        'in a future release. TODO link to docs.');
+      done();
+    }
+
+    env.addReporter({jasmineDone: jasmineDone});
     env.execute();
   });
 });
