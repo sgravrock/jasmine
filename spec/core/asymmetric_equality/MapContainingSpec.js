@@ -77,12 +77,12 @@ describe('MapContaining', function() {
 
     var containingMap = new MapI([
       [
-        jasmine.stringMatching(/^foo\d/),
+        jasmineUnderTest.stringMatching(/^foo\d/),
         'bar'
       ],
       [
         'baz',
-        jasmine.arrayContaining([2, 3])
+        jasmineUnderTest.arrayContaining([2, 3])
       ],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);
@@ -99,12 +99,12 @@ describe('MapContaining', function() {
 
     var containingMap = new MapI([
       [
-        jasmine.stringMatching(/^foo\d/),
+        jasmineUnderTest.stringMatching(/^foo\d/),
         'bar'
       ],
       [
         'baz',
-        jasmine.arrayContaining([2, 3])
+        jasmineUnderTest.arrayContaining([2, 3])
       ],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);
@@ -121,12 +121,12 @@ describe('MapContaining', function() {
 
     var containingMap = new MapI([
       [
-        jasmine.stringMatching(/^foo\d/),
+        jasmineUnderTest.stringMatching(/^foo\d/),
         'bar'
       ],
       [
         'baz',
-        jasmine.arrayContaining([4, 5])
+        jasmineUnderTest.arrayContaining([4, 5])
       ],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);

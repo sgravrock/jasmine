@@ -486,6 +486,7 @@ describe("matchersUtil", function() {
             matchersUtil = new jasmineUnderTest.MatchersUtil([symmetricTester]),
             shim;
 
+          spyOn(jasmineUnderTest.getEnv(), 'deprecated'); // suppress warning
           matchersUtil.equals(true, asymmetricTester);
           shim = asymmetricTester.asymmetricMatch.calls.argsFor(0)[1];
           expect(shim).toEqual(jasmine.any(jasmineUnderTest.MatchersUtil));

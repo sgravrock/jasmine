@@ -53,8 +53,8 @@ describe('SetContaining', function() {
     ]);
 
     var containingSet = new SetI([
-      jasmine.stringMatching(/^foo\d/),
-      jasmine.arrayContaining([2, 3]),
+      jasmineUnderTest.stringMatching(/^foo\d/),
+      jasmineUnderTest.arrayContaining([2, 3]),
     ]);
     var containing = new jasmineUnderTest.SetContaining(containingSet);
     var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
