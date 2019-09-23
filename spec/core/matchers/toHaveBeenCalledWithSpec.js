@@ -41,7 +41,7 @@ describe("toHaveBeenCalledWith", function() {
   });
 
   it("fails when the actual was called with different parameters", function() {
-    var util = jasmineUnderTest.matchersUtil,
+    var util = new jasmineUnderTest.MatchersUtil([]),
         matcher = jasmineUnderTest.matchers.toHaveBeenCalledWith(util),
         calledSpy = new jasmineUnderTest.Env().createSpy('called spy'),
         result;
