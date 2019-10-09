@@ -4,13 +4,22 @@ getJasmineRequireObj().asymmetricEqualityTesterArgCompatShim = function(j$) {
     customEqualityTesters
   ) {
     var self = Object.create(matchersUtil),
-      i;
+      props,
+      i,
+      k;
 
     copyAndDeprecate(self, customEqualityTesters, 'length');
 
     for (i = 0; i < customEqualityTesters.length; i++) {
       copyAndDeprecate(self, customEqualityTesters, i);
-      self[i] = customEqualityTesters[i];
+    }
+
+    props = Object.getOwnPropertyDescriptors(Array.prototype);
+
+    for (k in props) {
+      if (props.hasOwnProperty(k) && k !== 'length') {
+        copyAndDeprecate(self, Array.prototype, k);
+      }
     }
 
     return self;
