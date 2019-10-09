@@ -370,7 +370,8 @@ getJasmineRequireObj().Env = function(j$) {
         customMatchers: {},
         customAsyncMatchers: {},
         customSpyStrategies: {},
-        defaultStrategyFn: undefined
+        defaultStrategyFn: undefined,
+        pp: j$.makePrettyPrinter()
       };
 
       if (runnableResources[parentRunnableId]) {
@@ -1163,7 +1164,7 @@ getJasmineRequireObj().Env = function(j$) {
           message += error;
         } else {
           // pretty print all kind of objects. This includes arrays.
-          message += j$.pp(error);
+          message += runnableResources[currentRunnable().id].pp(error);
         }
       }
 
