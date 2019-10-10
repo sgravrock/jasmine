@@ -54,9 +54,11 @@ var getJasmineRequireObj = (function(jasmineGlobal) {
     j$.asymmetricEqualityTesterArgCompatShim = jRequire.asymmetricEqualityTesterArgCompatShim(
       j$
     );
+    j$.makePrettyPrinter = jRequire.makePrettyPrinter(j$);
+    j$.pp = j$.makePrettyPrinter();
     j$.MatchersUtil = jRequire.MatchersUtil(j$);
 
-    var staticMatchersUtil = new j$.MatchersUtil([]);
+    var staticMatchersUtil = new j$.MatchersUtil([], j$.pp);
     Object.defineProperty(j$, 'matchersUtil', {
       get: function() {
         j$.getEnv().deprecated(
@@ -74,8 +76,6 @@ var getJasmineRequireObj = (function(jasmineGlobal) {
     j$.ArrayWithExactContents = jRequire.ArrayWithExactContents(j$);
     j$.MapContaining = jRequire.MapContaining(j$);
     j$.SetContaining = jRequire.SetContaining(j$);
-    j$.makePrettyPrinter = jRequire.makePrettyPrinter(j$);
-    j$.pp = j$.makePrettyPrinter();
     j$.QueueRunner = jRequire.QueueRunner(j$);
     j$.ReportDispatcher = jRequire.ReportDispatcher(j$);
     j$.Spec = jRequire.Spec(j$);

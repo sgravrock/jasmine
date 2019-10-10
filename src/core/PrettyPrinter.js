@@ -1,5 +1,6 @@
 getJasmineRequireObj().makePrettyPrinter = function(j$) {
-  function SinglePrettyPrintRun() {
+  function SinglePrettyPrintRun(customObjectFormatters) {
+    this.customObjectFormatters_ = customObjectFormatters;
     this.ppNestLevel_ = 0;
     this.seen = [];
     this.length = 0;
@@ -24,7 +25,11 @@ getJasmineRequireObj().makePrettyPrinter = function(j$) {
   SinglePrettyPrintRun.prototype.format = function(value) {
     this.ppNestLevel_++;
     try {
-      if (j$.util.isUndefined(value)) {
+      var customFormatResult = this.applyCustomFormatters_(value);
+
+      if (customFormatResult) {
+        this.emitScalar(customFormatResult);
+      } else if (j$.util.isUndefined(value)) {
         this.emitScalar('undefined');
       } else if (value === null) {
         this.emitScalar('null');
@@ -92,6 +97,18 @@ getJasmineRequireObj().makePrettyPrinter = function(j$) {
       }
     } finally {
       this.ppNestLevel_--;
+    }
+  };
+
+  SinglePrettyPrintRun.prototype.applyCustomFormatters_ = function(value) {
+    var i, result;
+
+    for (i = 0; i < this.customObjectFormatters_.length; i++) {
+      result = this.customObjectFormatters_[i](value);
+
+      if (result !== undefined) {
+        return result;
+      }
     }
   };
 
@@ -365,9 +382,12 @@ getJasmineRequireObj().makePrettyPrinter = function(j$) {
     return extraKeys;
   }
 
-  return function() {
+  return function(customObjectFormatters) {
+    // TODO: check for places where this is called without customObjectFormatters
     return function(value) {
-      var prettyPrinter = new SinglePrettyPrintRun();
+      var prettyPrinter = new SinglePrettyPrintRun(
+        customObjectFormatters || []
+      );
       prettyPrinter.format(value);
       return prettyPrinter.stringParts.join('');
     };

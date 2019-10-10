@@ -24,8 +24,9 @@ describe('AsyncExpectation', function() {
 
       var addExpectationResult = jasmine.createSpy('addExpectationResult'),
         actual = Promise.resolve(),
+        pp = jasmineUnderTest.makePrettyPrinter([]),
         expectation = jasmineUnderTest.Expectation.asyncFactory({
-          util: new jasmineUnderTest.MatchersUtil([]),
+          util: new jasmineUnderTest.MatchersUtil([], pp),
           actual: actual,
           addExpectationResult: addExpectationResult
         });
@@ -47,7 +48,7 @@ describe('AsyncExpectation', function() {
       var addExpectationResult = jasmine.createSpy('addExpectationResult'),
         actual = Promise.reject(),
         expectation = jasmineUnderTest.Expectation.asyncFactory({
-          util: new jasmineUnderTest.MatchersUtil([]),
+          util: new jasmineUnderTest.MatchersUtil([], function() {}),
           actual: actual,
           addExpectationResult: addExpectationResult
         });
@@ -180,10 +181,11 @@ describe('AsyncExpectation', function() {
 
       var addExpectationResult = jasmine.createSpy('addExpectationResult'),
         actual = Promise.resolve(),
+        pp = jasmineUnderTest.makePrettyPrinter([]),
         expectation = jasmineUnderTest.Expectation.asyncFactory({
           actual: actual,
           addExpectationResult: addExpectationResult,
-          util: new jasmineUnderTest.MatchersUtil([])
+          util: new jasmineUnderTest.MatchersUtil([], pp)
         });
 
       return expectation
@@ -208,7 +210,7 @@ describe('AsyncExpectation', function() {
         expectation = jasmineUnderTest.Expectation.asyncFactory({
           actual: actual,
           addExpectationResult: addExpectationResult,
-          util: new jasmineUnderTest.MatchersUtil([])
+          util: new jasmineUnderTest.MatchersUtil([], function() {})
         });
 
       return expectation

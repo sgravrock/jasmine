@@ -1,7 +1,7 @@
 describe("ArrayWithExactContents", function() {
   it("matches an array with the same items in a different order", function() {
     var matcher = new jasmineUnderTest.ArrayWithExactContents(['a', 2, /a/]);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(matcher.asymmetricMatch([2, 'a', /a/], matchersUtil)).toBe(true);
   });
@@ -16,7 +16,7 @@ describe("ArrayWithExactContents", function() {
 
   it("does not match when an item is missing", function() {
     var matcher = new jasmineUnderTest.ArrayWithExactContents(['a', 2, /a/]);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(matcher.asymmetricMatch(['a', 2], matchersUtil)).toBe(false);
     expect(matcher.asymmetricMatch(['a', 2, undefined], matchersUtil)).toBe(false);
@@ -24,7 +24,7 @@ describe("ArrayWithExactContents", function() {
 
   it("does not match when there is an extra item", function() {
     var matcher = new jasmineUnderTest.ArrayWithExactContents(['a']);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(matcher.asymmetricMatch(['a', 2], matchersUtil)).toBe(false);
   });
@@ -44,7 +44,7 @@ describe("ArrayWithExactContents", function() {
       }
     };
     var matcher = new jasmineUnderTest.ArrayWithExactContents(["fooVal"]);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester], function() {});
 
     expect(matcher.asymmetricMatch(["fooBar"], matchersUtil)).toBe(true);
   });

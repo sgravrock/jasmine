@@ -316,6 +316,18 @@ getJasmineRequireObj().Env = function(j$) {
       }
     };
 
+    this.addCustomObjectFormatter = function(formatter) {
+      if (!currentRunnable()) {
+        throw new Error(
+          'Custom object formatters must be added in a before function or a spec'
+        );
+      }
+
+      runnableResources[currentRunnable().id].customObjectFormatters.push(
+        formatter
+      );
+    };
+
     j$.Expectation.addCoreMatchers(j$.matchers);
     j$.Expectation.addAsyncCoreMatchers(j$.asyncMatchers);
 
@@ -329,12 +341,24 @@ getJasmineRequireObj().Env = function(j$) {
       return 'suite' + nextSuiteId++;
     };
 
+    var makePrettyPrinter = function() {
+      var customObjectFormatters =
+        runnableResources[currentRunnable().id].customObjectFormatters;
+      return j$.makePrettyPrinter(customObjectFormatters);
+    };
+
+    var makeMatchersUtil = function() {
+      var customEqualityTesters =
+        runnableResources[currentRunnable().id].customEqualityTesters;
+      return new j$.MatchersUtil(customEqualityTesters, makePrettyPrinter());
+    };
+
     var expectationFactory = function(actual, spec) {
       var customEqualityTesters =
         runnableResources[spec.id].customEqualityTesters;
 
       return j$.Expectation.factory({
-        util: new j$.MatchersUtil(customEqualityTesters),
+        util: makeMatchersUtil(),
         customEqualityTesters: customEqualityTesters,
         customMatchers: runnableResources[spec.id].customMatchers,
         actual: actual,
@@ -347,11 +371,8 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     var asyncExpectationFactory = function(actual, spec) {
-      var customEqualityTesters =
-        runnableResources[spec.id].customEqualityTesters;
-
       return j$.Expectation.asyncFactory({
-        util: new j$.MatchersUtil(customEqualityTesters),
+        util: makeMatchersUtil(),
         customEqualityTesters: runnableResources[spec.id].customEqualityTesters,
         customAsyncMatchers: runnableResources[spec.id].customAsyncMatchers,
         actual: actual,
@@ -371,7 +392,7 @@ getJasmineRequireObj().Env = function(j$) {
         customAsyncMatchers: {},
         customSpyStrategies: {},
         defaultStrategyFn: undefined,
-        pp: j$.makePrettyPrinter()
+        customObjectFormatters: []
       };
 
       if (runnableResources[parentRunnableId]) {
@@ -1164,7 +1185,7 @@ getJasmineRequireObj().Env = function(j$) {
           message += error;
         } else {
           // pretty print all kind of objects. This includes arrays.
-          message += runnableResources[currentRunnable().id].pp(error);
+          message += makePrettyPrinter()(error);
         }
       }
 

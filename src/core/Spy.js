@@ -7,7 +7,7 @@ getJasmineRequireObj().Spy = function(j$) {
     };
   })();
 
-  var matchersUtil = new j$.MatchersUtil([]);
+  var matchersUtil = new j$.MatchersUtil([], j$.makePrettyPrinter());
 
   /**
    * _Note:_ Do not construct this directly, use {@link spyOn}, {@link spyOnProperty}, {@link jasmine.createSpy}, or {@link jasmine.createSpyObj}

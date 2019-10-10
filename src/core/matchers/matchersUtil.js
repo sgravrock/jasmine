@@ -1,12 +1,17 @@
 getJasmineRequireObj().MatchersUtil = function(j$) {
-  // TODO: what to do about jasmine.pp not being inject? move to JSON.stringify? gut PrettyPrinter?
+  // TODO: convert all uses of j$.pp to use the injected pp
 
-  function MatchersUtil(customTesters) {
+  function MatchersUtil(customTesters, pp) {
     if (!j$.isArray_(customTesters)) {
       throw new Error("MatchersUtil requires custom equality testers");
     }
 
+    if (!j$.isFunction_(pp)) {
+      throw new Error("MatchersUtil requires a pretty-printer");
+    }
+
     this.customTesters_ = customTesters;
+    this.pp = pp;
   };
 
   MatchersUtil.prototype.contains = function(haystack, needle, customTesters) {
@@ -33,6 +38,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
   };
 
   MatchersUtil.prototype.buildFailureMessage = function() {
+    var self = this;
     var args = Array.prototype.slice.call(arguments, 0),
       matcherName = args[0],
       isNot = args[1],
@@ -41,7 +47,7 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
       englishyPredicate = matcherName.replace(/[A-Z]/g, function(s) { return ' ' + s.toLowerCase(); });
 
     var message = 'Expected ' +
-      j$.pp(actual) +
+      self.pp(actual) +
       (isNot ? ' not ' : ' ') +
       englishyPredicate;
 

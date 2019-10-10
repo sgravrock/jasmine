@@ -305,12 +305,15 @@ describe('Env', function() {
     });
   });
 
-  it('creates an expectationFactory that uses the current custom equality testers', function(done) {
+  it('creates an expectationFactory that uses the current custom equality testers and object formatters', function(done) {
     function customEqualityTester() {}
+    function customObjectFormatter() {}
+    function prettyPrinter() {}
     var RealSpec = jasmineUnderTest.Spec,
       specInstance,
       expectationFactory;
     spyOn(jasmineUnderTest, 'MatchersUtil');
+    spyOn(jasmineUnderTest, 'makePrettyPrinter').and.returnValue(prettyPrinter);
     spyOn(jasmineUnderTest, 'Spec').and.callFake(function(options) {
       expectationFactory = options.expectationFactory;
       specInstance = new RealSpec(options);
@@ -319,14 +322,19 @@ describe('Env', function() {
 
     env.it('spec', function() {
       env.addCustomEqualityTester(customEqualityTester);
+      env.addCustomObjectFormatter(customObjectFormatter);
       expectationFactory('actual', specInstance);
     });
 
     env.addReporter({
       jasmineDone: function() {
-        expect(jasmineUnderTest.MatchersUtil).toHaveBeenCalledWith([
-          customEqualityTester
+        expect(jasmineUnderTest.makePrettyPrinter).toHaveBeenCalledWith([
+          customObjectFormatter
         ]);
+        expect(jasmineUnderTest.MatchersUtil).toHaveBeenCalledWith(
+          [customEqualityTester],
+          prettyPrinter
+        );
         done();
       }
     });
@@ -334,12 +342,15 @@ describe('Env', function() {
     env.execute();
   });
 
-  it('creates an asyncExpectationFactory that uses the current custom equality testers', function(done) {
+  it('creates an asyncExpectationFactory that uses the current custom equality testers and object formatters', function(done) {
     function customEqualityTester() {}
+    function customObjectFormatter() {}
+    function prettyPrinter() {}
     var RealSpec = jasmineUnderTest.Spec,
       specInstance,
       asyncExpectationFactory;
     spyOn(jasmineUnderTest, 'MatchersUtil');
+    spyOn(jasmineUnderTest, 'makePrettyPrinter').and.returnValue(prettyPrinter);
     spyOn(jasmineUnderTest, 'Spec').and.callFake(function(options) {
       asyncExpectationFactory = options.asyncExpectationFactory;
       specInstance = new RealSpec(options);
@@ -348,14 +359,19 @@ describe('Env', function() {
 
     env.it('spec', function() {
       env.addCustomEqualityTester(customEqualityTester);
+      env.addCustomObjectFormatter(customObjectFormatter);
       asyncExpectationFactory('actual', specInstance);
     });
 
     env.addReporter({
       jasmineDone: function() {
-        expect(jasmineUnderTest.MatchersUtil).toHaveBeenCalledWith([
-          customEqualityTester
+        expect(jasmineUnderTest.makePrettyPrinter).toHaveBeenCalledWith([
+          customObjectFormatter
         ]);
+        expect(jasmineUnderTest.MatchersUtil).toHaveBeenCalledWith(
+          [customEqualityTester],
+          prettyPrinter
+        );
         done();
       }
     });

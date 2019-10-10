@@ -31,7 +31,7 @@ describe('MapContaining', function() {
       ['foo', [1, 2, 3]],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualMap, matchersUtil)).toBe(true);
   });
@@ -47,7 +47,7 @@ describe('MapContaining', function() {
       ['foo', [1, 2, 3]],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualMap, matchersUtil)).toBe(false);
   });
@@ -63,7 +63,7 @@ describe('MapContaining', function() {
       ['foo', [1, 2]],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualMap, matchersUtil)).toBe(false);
   });
@@ -86,7 +86,7 @@ describe('MapContaining', function() {
       ],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualMap, matchersUtil)).toBe(true);
   });
@@ -108,7 +108,7 @@ describe('MapContaining', function() {
       ],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualMap, matchersUtil)).toBe(false);
   });
@@ -130,7 +130,7 @@ describe('MapContaining', function() {
       ],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualMap, matchersUtil)).toBe(false);
   });
@@ -153,7 +153,7 @@ describe('MapContaining', function() {
       ],
     ]);
     var containing = new jasmineUnderTest.MapContaining(containingMap);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualMap, matchersUtil)).toBe(true);
   });
@@ -165,7 +165,7 @@ describe('MapContaining', function() {
     }
     var actualMap = new MapI([['foo', -1]]);
     var containing = new jasmineUnderTest.MapContaining(new MapI([['foo', -2]]));
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester], function() {});
 
     expect(containing.asymmetricMatch(actualMap, matchersUtil)).toBe(true);
   });

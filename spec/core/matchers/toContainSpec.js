@@ -15,7 +15,7 @@ describe("toContain", function() {
     var tester = function (a, b) {
         return a.toString() === b.toString();
       },
-      matchersUtil = new jasmineUnderTest.MatchersUtil([tester]),
+      matchersUtil = new jasmineUnderTest.MatchersUtil([tester], function() {}),
       matcher = jasmineUnderTest.matchers.toContain(matchersUtil),
       result;
 

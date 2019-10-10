@@ -15,34 +15,34 @@ describe("ArrayContaining", function() {
 
   it("matches when the item is in the actual", function() {
     var containing = new jasmineUnderTest.ArrayContaining(["foo"]);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(["foo"], matchersUtil)).toBe(true);
   });
 
   it("matches when additional items are in the actual", function() {
     var containing = new jasmineUnderTest.ArrayContaining(["foo"]);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(["foo", "bar"], matchersUtil)).toBe(true);
   });
 
   it("does not match when the item is not in the actual", function() {
     var containing = new jasmineUnderTest.ArrayContaining(["foo"]);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(["bar"], matchersUtil)).toBe(false);
   });
 
   it("does not match when the actual is not an array", function() {
     var containing = new jasmineUnderTest.ArrayContaining(["foo"]);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch("foo", matchersUtil)).toBe(false);
   });
 
   it("jasmineToStrings itself", function() {
-    var containing = new jasmineUnderTest.ArrayContaining([]);
+    var containing = new jasmineUnderTest.ArrayContaining([], function() {});
 
     expect(containing.jasmineToString()).toMatch("<jasmine.arrayContaining");
   });
@@ -56,7 +56,7 @@ describe("ArrayContaining", function() {
       }
     };
     var containing = new jasmineUnderTest.ArrayContaining(["fooVal"]);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester], function() {});
 
     expect(containing.asymmetricMatch(["fooBar"], matchersUtil)).toBe(true);
   });

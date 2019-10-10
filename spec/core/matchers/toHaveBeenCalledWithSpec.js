@@ -17,7 +17,7 @@ describe("toHaveBeenCalledWith", function() {
 
   it("supports custom equality testers", function() {
     var customEqualityTesters = [function() { return true; }],
-      matchersUtil = new jasmineUnderTest.MatchersUtil(customEqualityTesters),
+      matchersUtil = new jasmineUnderTest.MatchersUtil(customEqualityTesters, function() {}),
       matcher = jasmineUnderTest.matchers.toHaveBeenCalledWith(matchersUtil),
       calledSpy = new jasmineUnderTest.Env().createSpy('called-spy'),
       result;
@@ -41,7 +41,7 @@ describe("toHaveBeenCalledWith", function() {
   });
 
   it("fails when the actual was called with different parameters", function() {
-    var util = new jasmineUnderTest.MatchersUtil([]),
+    var util = new jasmineUnderTest.MatchersUtil([], function() {}),
         matcher = jasmineUnderTest.matchers.toHaveBeenCalledWith(util),
         calledSpy = new jasmineUnderTest.Env().createSpy('called spy'),
         result;

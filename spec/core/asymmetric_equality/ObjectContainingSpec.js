@@ -2,7 +2,7 @@ describe("ObjectContaining", function() {
 
   it("matches any actual to an empty object", function() {
     var containing = new jasmineUnderTest.ObjectContaining({});
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch("foo", matchersUtil)).toBe(true);
   });
@@ -17,21 +17,21 @@ describe("ObjectContaining", function() {
 
   it("matches when the key/value pair is present in the actual", function() {
     var containing = new jasmineUnderTest.ObjectContaining({foo: "fooVal"});
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch({foo: "fooVal", bar: "barVal"}, matchersUtil)).toBe(true);
   });
 
   it("does not match when the key/value pair is not present in the actual", function() {
     var containing = new jasmineUnderTest.ObjectContaining({foo: "fooVal"});
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch({bar: "barVal", quux: "quuxVal"}, matchersUtil)).toBe(false);
   });
 
   it("does not match when the key is present but the value is different in the actual", function() {
     var containing = new jasmineUnderTest.ObjectContaining({foo: "other"});
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch({foo: "fooVal", bar: "barVal"}, matchersUtil)).toBe(false);
   });
@@ -44,28 +44,28 @@ describe("ObjectContaining", function() {
 
   it("matches recursively", function() {
     var containing = new jasmineUnderTest.ObjectContaining({one: new jasmineUnderTest.ObjectContaining({two: {}})});
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch({one: {two: {}}}, matchersUtil)).toBe(true);
   });
 
   it("matches when key is present with undefined value", function() {
     var containing = new jasmineUnderTest.ObjectContaining({ one: undefined });
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch({ one: undefined }, matchersUtil)).toBe(true);
   });
 
   it("does not match when key with undefined value is not present", function() {
     var containing = new jasmineUnderTest.ObjectContaining({ one: undefined });
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch({}, matchersUtil)).toBe(false);
   });
 
   it("matches defined properties", function(){
     var containing = new jasmineUnderTest.ObjectContaining({ foo: "fooVal" });
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     var definedPropertyObject = {};
     Object.defineProperty(definedPropertyObject, "foo", {
@@ -76,7 +76,7 @@ describe("ObjectContaining", function() {
 
   it("matches prototype properties", function(){
     var containing = new jasmineUnderTest.ObjectContaining({ foo: "fooVal" });
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     var prototypeObject = {foo: "fooVal"};
     var obj;
@@ -102,7 +102,7 @@ describe("ObjectContaining", function() {
       }
     };
     var containing = new jasmineUnderTest.ObjectContaining({foo: "fooVal"});
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester], function() {});
 
     expect(containing.asymmetricMatch({foo: "fooBar"}, matchersUtil)).toBe(true);
   });

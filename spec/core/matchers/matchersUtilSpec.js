@@ -1,94 +1,101 @@
 describe("matchersUtil", function() {
+  it("exposes the injected pretty-printer as .pp", function() {
+    var pp = function() {},
+      matchersUtil = new jasmineUnderTest.MatchersUtil([], pp);
+
+    expect(matchersUtil.pp).toBe(pp);
+  });
+
   describe("equals", function() {
     it("passes for literals that are triple-equal", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(null, null)).toBe(true);
       expect(matchersUtil.equals(void 0, void 0)).toBe(true);
     });
 
     it("fails for things that are not equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals({a: "foo"}, 1)).toBe(false);
     });
 
     it("passes for Strings that are equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals("foo", "foo")).toBe(true);
     });
 
     it("fails for Strings that are not equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals("foo", "bar")).toBe(false);
     });
 
     it("passes for Numbers that are equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(123, 123)).toBe(true);
     });
 
     it("fails for Numbers that are not equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(123, 456)).toBe(false);
     });
 
     it("passes for Dates that are equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(new Date("Jan 1, 1970"), new Date("Jan 1, 1970"))).toBe(true);
     });
 
     it("fails for Dates that are not equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(new Date("Jan 1, 1970"), new Date("Feb 3, 1991"))).toBe(false);
     });
 
     it("passes for Booleans that are equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(true, true)).toBe(true);
     });
 
     it("fails for Booleans that are not equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(true, false)).toBe(false);
     });
 
     it("passes for RegExps that are equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(/foo/, /foo/)).toBe(true);
     });
 
     it("fails for RegExps that are not equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(/foo/, /bar/)).toBe(false);
       expect(matchersUtil.equals(new RegExp("foo", "i"), new RegExp("foo"))).toBe(false);
     });
 
     it("passes for Arrays that are equivalent", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals([1, 2], [1, 2])).toBe(true);
     });
 
     it("passes for Arrays that are equivalent, with elements added by changing length", function() {
       var foo = [],
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       foo.length = 1;
 
       expect(matchersUtil.equals(foo, [undefined])).toBe(true);
     });
 
     it("fails for Arrays that have different lengths", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals([1, 2], [1, 2, 3])).toBe(false);
     });
 
     it("fails for Arrays that have different elements", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals([1, 2, 3], [1, 5, 3])).toBe(false);
     });
 
     it("fails for Arrays whose contents are equivalent, but have differing properties", function() {
       var one = [1,2,3],
         two = [1,2,3],
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       one.foo = 'bar';
       two.foo = 'baz';
@@ -99,7 +106,7 @@ describe("matchersUtil", function() {
     it("passes for Arrays with equivalent contents and properties", function() {
       var one = [1,2,3],
         two = [1,2,3],
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       one.foo = 'bar';
       two.foo = 'bar';
@@ -108,17 +115,17 @@ describe("matchersUtil", function() {
     });
 
     it("passes for Errors that are the same type and have the same message", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(new Error("foo"), new Error("foo"))).toBe(true);
     });
 
     it("fails for Errors that are the same type and have different messages", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(new Error("foo"), new Error("bar"))).toBe(false);
     });
 
     it("fails for objects with different constructors", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       function One() {}
       function Two() {}
 
@@ -126,29 +133,29 @@ describe("matchersUtil", function() {
     });
 
     it("passes for Objects that are equivalent (simple case)", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals({a: "foo"}, {a: "foo"})).toBe(true);
     });
 
     it("fails for Objects that are not equivalent (simple case)", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals({a: "foo"}, {a: "bar"})).toBe(false);
     });
 
     it("passes for Objects that are equivalent (deep case)", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals({a: "foo", b: { c: "bar"}}, {a: "foo", b: { c: "bar"}})).toBe(true);
     });
 
     it("fails for Objects that are not equivalent (deep case)", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals({a: "foo", b: { c: "baz"}}, {a: "foo", b: { c: "bar"}})).toBe(false);
     });
 
     it("passes for Objects that are equivalent (with cycles)", function() {
       var actual = { a: "foo" },
         expected = { a: "foo" },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       actual.b = actual;
       expected.b = actual;
@@ -159,7 +166,7 @@ describe("matchersUtil", function() {
     it("fails for Objects that are not equivalent (with cycles)", function() {
       var actual = { a: "foo" },
         expected = { a: "bar" },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       actual.b = actual;
       expected.b = actual;
@@ -170,7 +177,7 @@ describe("matchersUtil", function() {
     it("fails for Objects that have the same number of keys, but different keys/values", function () {
       var expected = { a: undefined },
         actual = { b: 1 },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       expect(matchersUtil.equals(actual, expected)).toBe(false);
     });
@@ -178,7 +185,7 @@ describe("matchersUtil", function() {
     it("fails when comparing an empty object to an empty array (issue #114)", function() {
       var emptyObject = {},
         emptyArray = [],
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
 
       expect(matchersUtil.equals(emptyObject, emptyArray)).toBe(false);
@@ -188,7 +195,7 @@ describe("matchersUtil", function() {
     it("passes for equivalent frozen objects (GitHub issue #266)", function() {
       var a = { foo: 1 },
         b = {foo: 1 },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       Object.freeze(a);
       Object.freeze(b);
@@ -201,7 +208,7 @@ describe("matchersUtil", function() {
 
       var p1 = new Promise(function () {}),
         p2 = new Promise(function () {}),
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       expect(matchersUtil.equals(p1, p1)).toBe(true);
       expect(matchersUtil.equals(p1, p2)).toBe(false);
@@ -217,7 +224,7 @@ describe("matchersUtil", function() {
           return;
         }
         var a = document.createElement("div");
-        var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
         a.setAttribute("test-attr", "attr-value");
         a.appendChild(document.createTextNode('test'));
@@ -233,7 +240,7 @@ describe("matchersUtil", function() {
         if (isNotRunningInBrowser()) {
           return;
         }
-        var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
         var iframe = document.createElement('iframe');
         document.body.appendChild(iframe);
         iframe.contentWindow.eval('window.testObject = {}');
@@ -245,7 +252,7 @@ describe("matchersUtil", function() {
         if (isNotRunningInBrowser()) {
           return;
         }
-        var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
         var a = document.createElement("div");
         a.setAttribute("test-attr", "attr-value");
         a.appendChild(document.createTextNode('test'));
@@ -276,7 +283,7 @@ describe("matchersUtil", function() {
         if (isNotRunningInNode()) {
           return;
         }
-        var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
         var vm = require('vm');
         var sandbox = {
           obj: null
@@ -290,7 +297,7 @@ describe("matchersUtil", function() {
         if (isNotRunningInNode()) {
           return;
         }
-        var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
         var vm = require('vm');
         var sandbox = {
           arr: null
@@ -304,7 +311,7 @@ describe("matchersUtil", function() {
     it("passes when Any is used", function() {
       var number = 3,
         anyNumber = new jasmineUnderTest.Any(Number),
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       expect(matchersUtil.equals(number, anyNumber)).toBe(true);
       expect(matchersUtil.equals(anyNumber, number)).toBe(true);
@@ -313,7 +320,7 @@ describe("matchersUtil", function() {
     it("fails when Any is compared to something unexpected", function() {
       var number = 3,
         anyString = new jasmineUnderTest.Any(String),
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       expect(matchersUtil.equals(number, anyString)).toBe(false);
       expect(matchersUtil.equals(anyString, number)).toBe(false);
@@ -325,7 +332,7 @@ describe("matchersUtil", function() {
         bar: 7
       },
         containing = new jasmineUnderTest.ObjectContaining({foo: 3}),
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       expect(matchersUtil.equals(obj, containing)).toBe(true);
       expect(matchersUtil.equals(containing, obj)).toBe(true);
@@ -334,7 +341,7 @@ describe("matchersUtil", function() {
     it("passes when MapContaining is used", function() {
       jasmine.getEnv().requireFunctioningMaps();
 
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var obj = new Map();
       obj.set(1, 2);
       obj.set('foo', 'bar');
@@ -348,7 +355,7 @@ describe("matchersUtil", function() {
     it("passes when SetContaining is used", function() {
       jasmine.getEnv().requireFunctioningSets();
 
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var obj = new Set();
       obj.add(1);
       obj.add('foo');
@@ -361,7 +368,7 @@ describe("matchersUtil", function() {
 
     it("passes when an asymmetric equality tester returns true", function() {
       var tester = { asymmetricMatch: function(other) { return true; } },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       expect(matchersUtil.equals(false, tester)).toBe(true);
       expect(matchersUtil.equals(tester, false)).toBe(true);
@@ -369,7 +376,7 @@ describe("matchersUtil", function() {
 
     it("fails when an asymmetric equality tester returns false", function() {
       var tester = { asymmetricMatch: function(other) { return false; } },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       expect(matchersUtil.equals(true, tester)).toBe(false);
       expect(matchersUtil.equals(tester, true)).toBe(false);
@@ -377,7 +384,7 @@ describe("matchersUtil", function() {
 
     it("passes when ArrayContaining is used", function() {
       var arr = ["foo", "bar"],
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       expect(matchersUtil.equals(arr, new jasmineUnderTest.ArrayContaining(["bar"]))).toBe(true);
     });
@@ -385,7 +392,7 @@ describe("matchersUtil", function() {
     it("passes when a custom equality matcher passed to equals returns true", function() {
       // TODO: remove this in the next major release.
       var tester = function(a, b) { return true; },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       spyOn(jasmineUnderTest.getEnv(), 'deprecated'); // suppress warning
 
@@ -394,13 +401,13 @@ describe("matchersUtil", function() {
 
     it("passes when a custom equality matcher passed to the constructor returns true", function() {
       var tester = function(a, b) { return true; },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([tester], function() {});
 
       expect(matchersUtil.equals(1, 2)).toBe(true);
     });
 
     it("passes for two empty Objects", function () {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals({}, {})).toBe(true);
     });
 
@@ -409,7 +416,7 @@ describe("matchersUtil", function() {
       var tester = function(a, b) { return jasmine.undefined; };
 
       it("passes for two empty Objects", function () {
-        var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
         spyOn(jasmineUnderTest.getEnv(), 'deprecated'); // suppress warning
         expect(matchersUtil.equals({}, {}, [tester])).toBe(true);
       });
@@ -419,7 +426,7 @@ describe("matchersUtil", function() {
       var tester = function(a, b) { return jasmine.undefined; };
 
       it("passes for two empty Objects", function () {
-        var matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+        var matchersUtil = new jasmineUnderTest.MatchersUtil([tester], function() {});
         expect(matchersUtil.equals({}, {})).toBe(true);
       });
     });
@@ -427,7 +434,7 @@ describe("matchersUtil", function() {
     it("fails for equivalents when a custom equality matcher passed to equals returns false", function() {
       // TODO: remove this in the next major release.
       var tester = function(a, b) { return false; },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       spyOn(jasmineUnderTest.getEnv(), 'deprecated'); // suppress warning
 
@@ -436,7 +443,7 @@ describe("matchersUtil", function() {
 
     it("fails for equivalents when a custom equality matcher passed to the constructor returns false", function() {
       var tester = function(a, b) { return false; },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([tester], function() {});
 
       expect(matchersUtil.equals(1, 1)).toBe(false);
     });
@@ -445,7 +452,7 @@ describe("matchersUtil", function() {
       // TODO: remove this in the next major release.
       var asymmetricTester = { asymmetricMatch: function(other) { return true; } },
         symmetricTester = function(a, b) { return false; },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       spyOn(jasmineUnderTest.getEnv(), 'deprecated'); // suppress warning
 
@@ -456,7 +463,7 @@ describe("matchersUtil", function() {
     it("passes for an asymmetric equality tester that returns true when a custom equality tester passed to the constructor return false", function() {
       var asymmetricTester = { asymmetricMatch: function(other) { return true; } },
         symmetricTester = function(a, b) { return false; },
-        matchersUtil = new jasmineUnderTest.MatchersUtil([symmetricTester()]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([symmetricTester()], function() {});
 
       expect(matchersUtil.equals(asymmetricTester, true)).toBe(true);
       expect(matchersUtil.equals(true, asymmetricTester)).toBe(true);
@@ -467,7 +474,7 @@ describe("matchersUtil", function() {
         it("is both a matchersUtil and the custom equality testers passed to equals", function() {
           var asymmetricTester = jasmine.createSpyObj('tester', ['asymmetricMatch']),
             symmetricTester = function() { } ,
-            matchersUtil = new jasmineUnderTest.MatchersUtil([]),
+            matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {}),
             shim;
 
           spyOn(jasmineUnderTest.getEnv(), 'deprecated'); // suppress warning
@@ -483,7 +490,7 @@ describe("matchersUtil", function() {
         it("is both a matchersUtil and the custom equality testers passed to the constructor", function() {
           var asymmetricTester = jasmine.createSpyObj('tester', ['asymmetricMatch']),
             symmetricTester = function() { } ,
-            matchersUtil = new jasmineUnderTest.MatchersUtil([symmetricTester]),
+            matchersUtil = new jasmineUnderTest.MatchersUtil([symmetricTester], function() {}),
             shim;
 
           spyOn(jasmineUnderTest.getEnv(), 'deprecated'); // suppress warning
@@ -499,7 +506,7 @@ describe("matchersUtil", function() {
     it("passes when an Any is compared to an Any that checks for the same type", function() {
       var any1 = new jasmineUnderTest.Any(Function),
         any2 = new jasmineUnderTest.Any(Function),
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       expect(matchersUtil.equals(any1, any2)).toBe(true);
     });
@@ -507,7 +514,7 @@ describe("matchersUtil", function() {
     it("passes for null prototype objects with same properties", function () {
       var objA = Object.create(null),
         objB = Object.create(null),
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       objA.name = 'test';
       objB.name = 'test';
@@ -518,7 +525,7 @@ describe("matchersUtil", function() {
     it("fails for null prototype objects with different properties", function () {
       var objA = Object.create(null),
         objB = Object.create(null),
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       objA.name = 'test';
       objB.test = 'name';
@@ -528,14 +535,14 @@ describe("matchersUtil", function() {
 
     it("passes when comparing two empty sets", function() {
       jasmine.getEnv().requireFunctioningSets();
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(new Set(), new Set())).toBe(true);
     });
 
     it("passes when comparing identical sets", function() {
       jasmine.getEnv().requireFunctioningSets();
 
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var setA = new Set();
       setA.add(6);
       setA.add(5);
@@ -549,7 +556,7 @@ describe("matchersUtil", function() {
     it("passes when comparing identical sets with different insertion order and simple elements", function() {
       jasmine.getEnv().requireFunctioningSets();
 
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var setA = new Set();
       setA.add(3);
       setA.add(6);
@@ -563,7 +570,7 @@ describe("matchersUtil", function() {
     it("passes when comparing identical sets with different insertion order and complex elements 1", function() {
       jasmine.getEnv().requireFunctioningSets();
 
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var setA1 = new Set();
       setA1.add(['a',3]);
       setA1.add([6,1]);
@@ -591,7 +598,7 @@ describe("matchersUtil", function() {
     it("passes when comparing identical sets with different insertion order and complex elements 2", function() {
       jasmine.getEnv().requireFunctioningSets();
 
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var setA = new Set();
       setA.add([[1,2], [3,4]]);
       setA.add([[5,6], [7,8]]);
@@ -604,7 +611,7 @@ describe("matchersUtil", function() {
 
     it("fails for sets with different elements", function() {
       jasmine.getEnv().requireFunctioningSets();
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var setA = new Set();
       setA.add(6);
       setA.add(3);
@@ -619,7 +626,7 @@ describe("matchersUtil", function() {
 
     it("fails for sets of different size", function() {
       jasmine.getEnv().requireFunctioningSets();
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var setA = new Set();
       setA.add(6);
       setA.add(3);
@@ -633,13 +640,13 @@ describe("matchersUtil", function() {
 
     it("passes when comparing two empty maps", function() {
       jasmine.getEnv().requireFunctioningMaps();
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.equals(new Map(), new Map())).toBe(true);
     });
 
     it("passes when comparing identical maps", function() {
       jasmine.getEnv().requireFunctioningMaps();
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var mapA = new Map();
       mapA.set(6, 5);
       var mapB = new Map();
@@ -649,7 +656,7 @@ describe("matchersUtil", function() {
 
     it("passes when comparing identical maps with different insertion order", function() {
       jasmine.getEnv().requireFunctioningMaps();
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var mapA = new Map();
       mapA.set("a", 3);
       mapA.set(6, 1);
@@ -661,7 +668,7 @@ describe("matchersUtil", function() {
 
     it("fails for maps with different elements", function() {
       jasmine.getEnv().requireFunctioningMaps();
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var mapA = new Map();
       mapA.set(6, 3);
       mapA.set(5, 1);
@@ -674,7 +681,7 @@ describe("matchersUtil", function() {
 
     it("fails for maps of different size", function() {
       jasmine.getEnv().requireFunctioningMaps();
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var mapA = new Map();
       mapA.set(6, 3);
       var mapB = new Map();
@@ -728,7 +735,7 @@ describe("matchersUtil", function() {
     });
 
     it('logs a deprecation warning when custom equality testers are passed', function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]),
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {}),
         deprecated = spyOn(jasmineUnderTest.getEnv(), 'deprecated');
 
       matchersUtil.equals(0, 0, []);
@@ -738,7 +745,7 @@ describe("matchersUtil", function() {
     });
 
     it('logs a deprecation warning when a diffBuilder is provided as the fourth argument', function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]),
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {}),
         deprecated = spyOn(jasmineUnderTest.getEnv(), 'deprecated');
 
       matchersUtil.equals(0, 0, null, new jasmineUnderTest.NullDiffBuilder());
@@ -750,7 +757,7 @@ describe("matchersUtil", function() {
     it('uses a diffBuilder if one is provided as the fourth argument', function() {
       // TODO: remove this in the next major release.
       var diffBuilder = new jasmineUnderTest.DiffBuilder(),
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       spyOn(jasmineUnderTest.getEnv(), 'deprecated'); // suppress warning
       spyOn(diffBuilder, 'record');
@@ -764,7 +771,7 @@ describe("matchersUtil", function() {
 
     it('uses a diffBuilder if one is provided as the third argument', function() {
       var diffBuilder = new jasmineUnderTest.DiffBuilder(),
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       spyOn(diffBuilder, 'record');
       spyOn(diffBuilder, 'withPath').and.callThrough();
@@ -778,27 +785,27 @@ describe("matchersUtil", function() {
 
   describe("contains", function() {
     it("passes when expected is a substring of actual", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.contains("ABC", "BC")).toBe(true);
     });
 
     it("fails when expected is a not substring of actual", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.contains("ABC", "X")).toBe(false);
     });
 
     it("passes when expected is an element in an actual array", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.contains(['foo', 'bar'], 'foo')).toBe(true);
     });
 
     it("fails when expected is not an element in an actual array", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.contains(['foo', 'bar'], 'baz')).toBe(false);
     });
 
     it("passes with mixed-element arrays", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.contains(["foo", {some: "bar"}], "foo")).toBe(true);
       expect(matchersUtil.contains(["foo", {some: "bar"}], {some: "bar"})).toBe(true);
     });
@@ -806,7 +813,7 @@ describe("matchersUtil", function() {
     it("uses custom equality testers if passed to contains and actual is an Array", function() {
       // TODO: remove this in the next major release.
       var customTester = function(a, b) {return true;},
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]),
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {}),
         deprecated = spyOn(jasmineUnderTest.getEnv(), 'deprecated');
 
         expect(matchersUtil.contains([1, 2], 3, [customTester])).toBe(true);
@@ -816,24 +823,24 @@ describe("matchersUtil", function() {
 
     it("uses custom equality testers if passed to the constructor and actual is an Array", function() {
       var customTester = function(a, b) {return true;},
-        matchersUtil = new jasmineUnderTest.MatchersUtil([customTester]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([customTester], function() {});
 
       expect(matchersUtil.contains([1, 2], 3)).toBe(true);
     });
 
     it("fails when actual is undefined", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.contains(undefined, 'A')).toBe(false);
     });
 
     it("fails when actual is null", function() {
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       expect(matchersUtil.contains(null, 'A')).toBe(false);
     });
 
     it("passes with array-like objects", function() {
       var capturedArgs = null,
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
       function testFunction(){
         capturedArgs = arguments;
@@ -846,7 +853,7 @@ describe("matchersUtil", function() {
     it("passes for set members", function() {
       jasmine.getEnv().requireFunctioningSets();
 
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var setItem = {'foo': 'bar'};
       var set = new Set();
       set.add(setItem);
@@ -858,7 +865,7 @@ describe("matchersUtil", function() {
     it("fails (!) for objects that equal to a set member", function() {
       jasmine.getEnv().requireFunctioningSets();
 
-      var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+      var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
       var set = new Set();
       set.add({'foo': 'bar'});
 
@@ -871,7 +878,8 @@ describe("matchersUtil", function() {
     it("builds an English sentence for a failure case", function() {
       var actual = "foo",
         name = "toBar",
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]),
+        pp = jasmineUnderTest.makePrettyPrinter([]),
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], pp),
         message = matchersUtil.buildFailureMessage(name, false, actual);
 
       expect(message).toEqual("Expected 'foo' to bar.");
@@ -881,7 +889,8 @@ describe("matchersUtil", function() {
       var actual = "foo",
         name = "toBar",
         isNot = true,
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]),
+        pp = jasmineUnderTest.makePrettyPrinter([]),
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], pp),
         message = message = matchersUtil.buildFailureMessage(name, isNot, actual);
 
       expect(message).toEqual("Expected 'foo' not to bar.");
@@ -890,10 +899,22 @@ describe("matchersUtil", function() {
     it("builds an English sentence for an arbitrary array of expected arguments", function() {
       var actual = "foo",
         name = "toBar",
-        matchersUtil = new jasmineUnderTest.MatchersUtil([]),
+        pp = jasmineUnderTest.makePrettyPrinter([]),
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], pp),
         message = matchersUtil.buildFailureMessage(name, false, actual, "quux", "corge");
 
       expect(message).toEqual("Expected 'foo' to bar 'quux', 'corge'.");
+    });
+
+    it("uses the injected pretty-printer to format the expected", function() {
+      var actual = "foo",
+        name = "toBar",
+        isNot = false,
+        pp = function(value) { return '<' + value + '>'; },
+        matchersUtil = new jasmineUnderTest.MatchersUtil([], pp),
+        message = message = matchersUtil.buildFailureMessage(name, isNot, actual);
+
+      expect(message).toEqual("Expected <foo> to bar.");
     });
   });
 });

@@ -28,7 +28,7 @@ describe('SetContaining', function() {
       [1, 2, 3], {'foo': 'bar'}
     ]);
     var containing = new jasmineUnderTest.SetContaining(containingSet);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualSet, matchersUtil)).toBe(true);
   });
@@ -42,7 +42,7 @@ describe('SetContaining', function() {
       [1, 2], {'foo': 'bar'}
     ]);
     var containing = new jasmineUnderTest.SetContaining(containingSet);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualSet, matchersUtil)).toBe(false);
   });
@@ -57,7 +57,7 @@ describe('SetContaining', function() {
       jasmineUnderTest.arrayContaining([2, 3]),
     ]);
     var containing = new jasmineUnderTest.SetContaining(containingSet);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualSet, matchersUtil)).toBe(true);
   });
@@ -72,7 +72,7 @@ describe('SetContaining', function() {
       jasmine.arrayContaining([2, 3]),
     ]);
     var containing = new jasmineUnderTest.SetContaining(containingSet);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualSet, matchersUtil)).toBe(false);
   });
@@ -86,7 +86,7 @@ describe('SetContaining', function() {
       new jasmineUnderTest.SetContaining(new SetI(['bar'])), 'foo'
     ]);
     var containing = new jasmineUnderTest.SetContaining(containingSet);
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {});
 
     expect(containing.asymmetricMatch(actualSet, matchersUtil)).toBe(true);
   });
@@ -98,7 +98,7 @@ describe('SetContaining', function() {
     }
     var actualSet = new SetI(['foo', -1]);
     var containing = new jasmineUnderTest.SetContaining(new SetI([-2, 'foo']));
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester]);
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([tester], function() {});
 
     expect(containing.asymmetricMatch(actualSet, matchersUtil)).toBe(true);
   });

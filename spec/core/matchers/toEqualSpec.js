@@ -2,7 +2,7 @@ describe("toEqual", function() {
   "use strict";
 
   function compareEquals(actual, expected) {
-    var util = new jasmineUnderTest.MatchersUtil([]),
+    var util = new jasmineUnderTest.MatchersUtil([], function() {}),
       matcher = jasmineUnderTest.matchers.toEqual(util);
 
     var result = matcher.compare(actual, expected);
@@ -31,7 +31,7 @@ describe("toEqual", function() {
     var tester = function (a, b) {
         return a.toString() === b.toString();
       },
-      util = new jasmineUnderTest.MatchersUtil([tester]),
+      util = new jasmineUnderTest.MatchersUtil([tester], function() {}),
       matcher = jasmineUnderTest.matchers.toEqual(util),
       result;
 
