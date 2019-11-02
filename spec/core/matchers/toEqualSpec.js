@@ -122,6 +122,19 @@ describe("toEqual", function() {
     expect(matcher.compare(actual, expected).message).toEqual(message);
   });
 
+  it("uses custom object formatters to build diffs", function() {
+    function formatter(x) { return '|' + x + '|'; }
+
+    var actual = [{foo: 4}],
+      expected = [{foo: 5}],
+      prettyPrinter = jasmineUnderTest.makePrettyPrinter([formatter]),
+      util = new jasmineUnderTest.MatchersUtil([], prettyPrinter),
+      matcher = jasmineUnderTest.matchers.toEqual(util),
+      message = "Expected $[0].foo = |4| to equal |5|.";
+
+    expect(matcher.compare(actual, expected).message).toEqual(message);
+  });
+
   it("reports extra and missing properties of the root-level object", function() {
     var actual = {x: 1},
       expected = {a: 1},
@@ -841,7 +854,7 @@ describe("toEqual", function() {
         pp = jasmineUnderTest.makePrettyPrinter([formatter]),
         util = new jasmineUnderTest.MatchersUtil([], pp),
         matcher = jasmineUnderTest.matchers.toEqual(util),
-        message = 'Expected $.length = 5 to equal 4.\n' +
+        message = 'Expected $.length = |5| to equal |4|.\n' +
           'Unexpected $[4] = |5| in array.';
 
       expect(matcher.compare(actual, expected).message).toEqual(message);

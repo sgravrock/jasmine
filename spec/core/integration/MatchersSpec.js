@@ -359,6 +359,32 @@ describe('Matchers (Integration)', function() {
     verifyFails(function(env) {
       env.expect('a').toEqual('b');
     });
+
+    it('uses custom object formatters to build diffs', function(done) {
+      var env = new jasmineUnderTest.Env();
+      env.it('a spec', function() {
+        env.addCustomObjectFormatter(function(val) {
+          if (val === 5) {
+            return "five"
+          } else if (val === 4) {
+            return "four"
+          }
+        });
+        env.expect([{foo: 4}]).toEqual([{foo: 5}]);
+      });
+
+      var specExpectations = function(result) {
+        expect(result.status).toEqual('failed');
+        expect(result.failedExpectations.length)
+          .withContext('Number of failed expectations')
+          .toEqual(1);
+        expect(result.failedExpectations[0].message)
+          .toEqual("Expected $[0].foo = four to equal five.");
+      };
+
+      env.addReporter({ specDone: specExpectations, jasmineDone: done });
+      env.execute();
+    });
   });
 
   describe('toHaveBeenCalled', function() {
