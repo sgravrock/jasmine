@@ -388,6 +388,16 @@ describe('PrettyPrinter', function() {
     expect(pp(obj)).toEqual('strung');
   });
 
+  it('should pass itself to jasmineToString', function() {
+    var pp = jasmineUnderTest.makePrettyPrinter([]);
+    var obj = {
+      jasmineToString: jasmine.createSpy('jasmineToString').and.returnValue('')
+    };
+
+    pp(obj);
+    expect(obj.jasmineToString).toHaveBeenCalledWith(pp);
+  });
+
   it('should stringify objects that implement custom toString', function() {
     var pp = jasmineUnderTest.makePrettyPrinter([]);
     var obj = {

@@ -1,10 +1,11 @@
 getJasmineRequireObj().makePrettyPrinter = function(j$) {
-  function SinglePrettyPrintRun(customObjectFormatters) {
+  function SinglePrettyPrintRun(customObjectFormatters, pp) {
     this.customObjectFormatters_ = customObjectFormatters;
     this.ppNestLevel_ = 0;
     this.seen = [];
     this.length = 0;
     this.stringParts = [];
+    this.pp_ = pp;
   }
 
   function hasCustomToString(value) {
@@ -38,7 +39,7 @@ getJasmineRequireObj().makePrettyPrinter = function(j$) {
       } else if (value === j$.getGlobal()) {
         this.emitScalar('<global>');
       } else if (value.jasmineToString) {
-        this.emitScalar(value.jasmineToString());
+        this.emitScalar(value.jasmineToString(this.pp_));
       } else if (typeof value === 'string') {
         this.emitString(value);
       } else if (j$.isSpy(value)) {
@@ -384,12 +385,15 @@ getJasmineRequireObj().makePrettyPrinter = function(j$) {
 
   return function(customObjectFormatters) {
     // TODO: check for places where this is called without customObjectFormatters
-    return function(value) {
+    var pp = function(value) {
       var prettyPrinter = new SinglePrettyPrintRun(
-        customObjectFormatters || []
+        customObjectFormatters || [],
+        pp
       );
       prettyPrinter.format(value);
       return prettyPrinter.stringParts.join('');
     };
+
+    return pp;
   };
 };
