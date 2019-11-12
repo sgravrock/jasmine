@@ -2,7 +2,7 @@ describe('#toBeResolvedTo', function() {
   it('passes if the promise is resolved to the expected value', function() {
     jasmine.getEnv().requirePromises();
 
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {}),
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], new jasmineUnderTest.makePrettyPrinter()),
       matcher = jasmineUnderTest.asyncMatchers.toBeResolvedTo(matchersUtil),
       actual = Promise.resolve({foo: 42});
 
@@ -14,7 +14,7 @@ describe('#toBeResolvedTo', function() {
   it('fails if the promise is rejected', function() {
     jasmine.getEnv().requirePromises();
 
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {}),
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], new jasmineUnderTest.makePrettyPrinter()),
       matcher = jasmineUnderTest.asyncMatchers.toBeResolvedTo(matchersUtil),
       actual = Promise.reject('AsyncExpectationSpec error');
 
@@ -29,7 +29,7 @@ describe('#toBeResolvedTo', function() {
   it('fails if the promise is resolved to a different value', function() {
     jasmine.getEnv().requirePromises();
 
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {}),
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], new jasmineUnderTest.makePrettyPrinter()),
       matcher = jasmineUnderTest.asyncMatchers.toBeResolvedTo(matchersUtil),
       actual = Promise.resolve({foo: 17});
 
@@ -44,7 +44,7 @@ describe('#toBeResolvedTo', function() {
   it('builds its message correctly when negated', function() {
     jasmine.getEnv().requirePromises();
 
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {}),
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], new jasmineUnderTest.makePrettyPrinter()),
       matcher = jasmineUnderTest.asyncMatchers.toBeResolvedTo(matchersUtil),
       actual = Promise.resolve(true);
 
@@ -60,7 +60,7 @@ describe('#toBeResolvedTo', function() {
     jasmine.getEnv().requirePromises();
 
     var customEqualityTesters = [function() { return true; }],
-      matchersUtil = new jasmineUnderTest.MatchersUtil(customEqualityTesters, function() {}),
+      matchersUtil = new jasmineUnderTest.MatchersUtil(customEqualityTesters, new jasmineUnderTest.makePrettyPrinter()),
       matcher = jasmineUnderTest.asyncMatchers.toBeResolvedTo(matchersUtil),
       actual = Promise.resolve('actual');
 
@@ -70,7 +70,7 @@ describe('#toBeResolvedTo', function() {
   });
 
   it('fails if actual is not a promise', function() {
-    var matchersUtil = new jasmineUnderTest.MatchersUtil([], function() {}),
+    var matchersUtil = new jasmineUnderTest.MatchersUtil([], new jasmineUnderTest.makePrettyPrinter()),
       matcher = jasmineUnderTest.asyncMatchers.toBeResolvedTo(matchersUtil),
       actual = 'not a promise';
 

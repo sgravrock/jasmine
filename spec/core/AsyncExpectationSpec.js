@@ -123,7 +123,8 @@ describe('AsyncExpectation', function() {
       var util = {
           buildFailureMessage: function() {
             return 'failure message';
-          }
+          },
+          pp: jasmineUnderTest.makePrettyPrinter()
         },
         addExpectationResult = jasmine.createSpy('addExpectationResult'),
         expectation = jasmineUnderTest.Expectation.asyncFactory({
@@ -210,7 +211,10 @@ describe('AsyncExpectation', function() {
         expectation = jasmineUnderTest.Expectation.asyncFactory({
           actual: actual,
           addExpectationResult: addExpectationResult,
-          util: new jasmineUnderTest.MatchersUtil([], function() {})
+          util: new jasmineUnderTest.MatchersUtil(
+            [],
+            jasmineUnderTest.makePrettyPrinter()
+          )
         });
 
       return expectation
