@@ -55,10 +55,21 @@ var getJasmineRequireObj = (function(jasmineGlobal) {
       j$
     );
     j$.makePrettyPrinter = jRequire.makePrettyPrinter(j$);
-    j$.pp = j$.makePrettyPrinter();
+    j$.basicPrettyPrinter_ = j$.makePrettyPrinter();
+    Object.defineProperty(j$, 'pp', {
+      get: function() {
+        j$.getEnv().deprecated(
+          'jasmine.pp is deprecated and will be removed in a future release. ' +
+            'Use the pp method of the matchersUtil passed to the matcher factory ' +
+            "or the asymmetric equality tester's `asymmetricMatch` method " +
+            'instead. TODO link to docs.'
+        );
+        return j$.basicPrettyPrinter_;
+      }
+    });
     j$.MatchersUtil = jRequire.MatchersUtil(j$);
 
-    var staticMatchersUtil = new j$.MatchersUtil([], j$.pp);
+    var staticMatchersUtil = new j$.MatchersUtil([], j$.basicPrettyPrinter_);
     Object.defineProperty(j$, 'matchersUtil', {
       get: function() {
         j$.getEnv().deprecated(
