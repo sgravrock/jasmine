@@ -13,6 +13,7 @@ getJasmineRequireObj().DiffBuilder = function (j$) {
       },
 
       recordMismatch: function (formatter) {
+        console.log("Adding mismatch at path", path.components);
         mismatches.add(path, formatter || defaultFormatter);
       },
 
@@ -20,25 +21,31 @@ getJasmineRequireObj().DiffBuilder = function (j$) {
         var messages = [];
 
         mismatches.traverse(function (path, isLeaf, formatter) {
+          console.log("traverse(", path.components, ",", isLeaf, ",", formatter);
           var actualCustom, expectedCustom, useCustom,
             actual = path.dereference(actualRoot),
             expected = path.dereference(expectedRoot);
 
           if (formatter) {
+            console.log("Using specified formatter at", path.components, ":", formatter)
             messages.push(formatter(actual, expected, path, prettyPrinter));
             return true;
           }
+
+          console.log("!formatter, leaf:", isLeaf);
 
           actualCustom = prettyPrinter.customFormat_(actual);
           expectedCustom = prettyPrinter.customFormat_(expected);
           useCustom = !(j$.util.isUndefined(actualCustom) && j$.util.isUndefined(expectedCustom));
 
           if (useCustom) {
+            console.log("Using custom at", path.components, "(formatter =", formatter, ")")
             messages.push(wrapPrettyPrinted(actualCustom, expectedCustom, path));
             return false; // don't recurse further
           }
 
           if (isLeaf) {
+            throw new Error('leaf yo')
             messages.add(defaultFormatter(actual, expected, path, prettyPrinter));
           }
 

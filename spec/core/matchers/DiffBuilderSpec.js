@@ -117,4 +117,19 @@ describe("DiffBuilder", function () {
 
     expect(diffBuilder.getMessage()).toEqual(expectedMsg);
   });
+
+  it("uses custom object formatters in preference to the default formatter", function() {
+    var formatter = function(x) {
+      if (typeof x === 'number') {
+        return '[number:' + x + ']';
+      }
+    };
+    prettyPrinter = jasmineUnderTest.makePrettyPrinter([formatter]);
+    var diffBuilder = new jasmineUnderTest.DiffBuilder({prettyPrinter: prettyPrinter});
+
+    diffBuilder.setRoots(5, 4);
+    diffBuilder.recordMismatch();
+
+    expect(diffBuilder.getMessage()).toEqual('Expected [number:5] to equal [number: 4].');
+  });
 });
