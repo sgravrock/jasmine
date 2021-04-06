@@ -90,7 +90,7 @@ describe('GlobalErrors', function() {
     }).toThrowError('popListener expects a listener');
   });
 
-  it('throws when the argument to #popListener is not the current listener', function() {
+  xit('throws when the argument to #popListener is not the current listener', function() {
     var errors = new jasmineUnderTest.GlobalErrors({});
     errors.pushListener(function() {});
     expect(function() {

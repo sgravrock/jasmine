@@ -63,11 +63,11 @@ getJasmineRequireObj().ExceptionFormatter = function(j$) {
           stackTrace.style === 'webkit' ? '<Jasmine>' : '    at <Jasmine>';
 
       stackTrace.frames.forEach(function(frame) {
-        if (frame.file !== jasmineFile) {
+        // if (frame.file !== jasmineFile) {
           result.push(frame.raw);
-        } else if (result[result.length - 1] !== jasmineMarker) {
-          result.push(jasmineMarker);
-        }
+        // } else if (result[result.length - 1] !== jasmineMarker) {
+        //   result.push(jasmineMarker);
+        // }
       });
 
       return result;

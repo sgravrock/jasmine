@@ -1,0 +1,12 @@
+#!/bin/sh
+
+n=0
+while [ $n -lt 50 ]; do
+	n=$(($n + 1))
+	echo ">>>> Run $n"
+	JASMINE_BROWSER=safari node spec/support/ci.js
+
+	if [ $? -ne 0 -a $? -ne 2 ]; then
+		exit 1
+	fi
+done

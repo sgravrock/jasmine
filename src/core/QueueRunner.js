@@ -58,6 +58,8 @@ getJasmineRequireObj().QueueRunner = function(j$) {
       // be preffered, otherwise the call stack would get lost.
       self.onException(error || message);
     };
+    this.handleFinalError.id =
+      'QueueRunner#handleFinalError for queue id ' + this.id_;
     this.globalErrors.pushListener(this.handleFinalError);
     this.run(0);
   };
@@ -125,6 +127,12 @@ getJasmineRequireObj().QueueRunner = function(j$) {
       queueableFn = self.queueableFns[iterativeIndex],
       timeoutId,
       maybeThenable;
+
+    handleError.id =
+      'QueueRunner handleError for id=' +
+      this.id_ +
+      ', index=' +
+      iterativeIndex;
 
     next.fail = function nextFail() {
       self.fail.apply(null, arguments);
@@ -208,7 +216,19 @@ getJasmineRequireObj().QueueRunner = function(j$) {
       }
     }
 
+    if (self.stackAlreadyCleared) {
+      var e = new Error("Can't clearStack twice (before clearing!)");
+      console.error(e);
+      throw new Error(e.message + '\n' + e.stack);
+    }
+
     this.clearStack(function() {
+      if (self.stackAlreadyCleared) {
+        var e = new Error("Can't clearStack twice (after clearing)");
+        console.error(e);
+        throw e;
+      }
+      self.stackAlreadyCleared = true;
       self.globalErrors.popListener(self.handleFinalError);
       self.onComplete(self.errored && new StopExecutionError());
     });
