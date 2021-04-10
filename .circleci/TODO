@@ -1,1 +1,2 @@
 * Try to reuse npm install result across Node 14 jobs
+* Set a more reasonable job timeout
