@@ -1,2 +1,2 @@
 * Build against browsers with Sauce
-* Make sure Sauce credentials are secure
+* https://github.com/saucelabs/CircleCI-SauceLabs-ORB/blob/master/src/%40orb.yml

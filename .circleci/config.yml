@@ -53,13 +53,6 @@ jobs:
       JASMINE_BROWSER: internet explorer
       SAUCE_BROWSER_VERSION: 11
     steps:
-      - run:
-          name: Early return if this build is from a PR
-          command: |
-            if [ -n "$CIRCLE_PR_NUMBER" ]; then
-              echo "This job does not run against pull requesets"
-              circleci step halt
-            fi
       - checkout
       - run:
           name: Report Node and NPM versions
