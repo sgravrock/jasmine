@@ -71,7 +71,8 @@ workflows:
   version: 2
   tests:
     jobs:
-      - test_node_with_long_property_tests:
+ #     - test_node_with_long_property_tests:
+      - test_node:
           executor: node14
           name: test_node_14
       - test_node:
