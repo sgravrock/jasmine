@@ -75,11 +75,16 @@ jobs:
           name: Open Sauce tunnel
           no_output_timeout: 2m
           command: |
-            sc -u ${SAUCE_USERNAME} -k ${SAUCE_ACCESS_KEY} -X 4445 &
+            sc -u ${SAUCE_USERNAME} -k ${SAUCE_ACCESS_KEY} -X 4445 | tee /tmp/sc-output &
             # wait for sauce tunnel up to 1 minute
-            while ! nc -z localhost 4445; do
+            while ! fgrep "you may start your tests" /tmp/sc-output > /dev/null; do
                 sleep 1
             done
+            if ! nc -z localhost 4445; then
+               echo "Can't connect to Sauce tunnel"
+               killall sc
+               exit 1
+            fi
       - run:
           name: Run tests
           command: npm run ci
