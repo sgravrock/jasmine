@@ -186,7 +186,7 @@ workflows:
              - build_node14
           browser_name: safari
           browser_version: "14"
-          os: OS X 11.0
+          os: OS X 11.00
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
