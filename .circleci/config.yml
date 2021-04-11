@@ -3,8 +3,6 @@
 
 # TODO:
 # * Remove Safari 9-12 once green
-# * It would be nice to only run `npm install` once per node version and
-#   pass the result to downstream jobs.
 # * Set a more reasonable job timeout than the 5 hour default.
 # * Re-enable long property tests.
 
@@ -17,15 +15,18 @@ executors:
   node14:
     docker:
       - image: circleci/node:14
+    resource_class: small
   node12:
     docker:
       - image: circleci/node:12
+    resource_class: small
   node10:
     docker:
       - image: circleci/node:10
+    resource_class: small
 
 jobs:
-  test_node: &test_node
+  build:
     parameters:
       executor:
         type: executor
@@ -39,8 +40,24 @@ jobs:
           name: Install dependencies
           command: npm install
       - run:
+          name: Install Sauce Connect
+          command: |
+            cd /tmp
+             curl https://saucelabs.com/downloads/sc-4.6.4-linux.tar.gz | tar zxf -
+            chmod +x sc-4.6.4-linux/bin/sc
+            sudo cp sc-4.6.4-linux/bin/sc /usr/local/bin
+            sc --version
+      - run:
           name: Build
           command: npm run build
+
+  test_node: &test_node
+    parameters:
+      executor:
+        type: executor
+    executor: << parameters.executor >>
+    steps:
+      - checkout
       - run:
           name: Run tests
           command: npm test
@@ -67,23 +84,6 @@ jobs:
       SAUCE_OS: << parameters.os >>
     steps:
       - checkout
-      - run:
-          name: Report Node and NPM versions
-          command: echo "Using Node $(node --version) and NPM $(npm --version)"
-      - run:
-          name: Install Sauce Connect
-          command: |
-            cd /tmp
-             curl https://saucelabs.com/downloads/sc-4.6.4-linux.tar.gz | tar zxf -
-            chmod +x sc-4.6.4-linux/bin/sc
-            sudo cp sc-4.6.4-linux/bin/sc /usr/local/bin
-            sc --version
-      - run:
-          name: Install dependencies
-          command: npm install
-      - run:
-          name: Build
-          command: npm run build
       - run:
           name: Open Sauce tunnel
           no_output_timeout: 2m
@@ -113,13 +113,23 @@ workflows:
   version: 2
   tests:
     jobs:
+      - build:
+          executor: node14
+          name: build_node14
+      - build:
+          executor: node12
+          name: build_node12
  #     - test_node_with_long_property_tests:
-#      - test_node:
-#          executor: node14
-#          name: node_14
-#      - test_node:
-#          executor: node12
-#          name: node_12
+      - test_node:
+          executor: node14
+          name: node_14
+          requires:
+             - build_node14
+      - test_node:
+          executor: node12
+          name: node_12
+          requires:
+             - build_node12
 #      - test_node:
 #          executor: node10
 #          name: node_10
@@ -157,6 +167,8 @@ workflows:
 #              ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
           name: firefox_68
+          requires:
+             - build_node14
           browser_name: firefox
           browser_version: "68"
           os: Windows 10
@@ -173,6 +185,8 @@ workflows:
 #              ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
           name: safari_14
+          requires:
+             - build_node14
           browser_name: safari
           browser_version: "14"
           os: OS X 11.0
@@ -189,6 +203,8 @@ workflows:
 #              ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
           name: safari_8
+          requires:
+             - build_node14
           browser_name: safari
           browser_version: "8"
           os: OS X 10.10
@@ -205,6 +221,8 @@ workflows:
 #              ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
           name: safari_9
+          requires:
+             - build_node14
           browser_name: safari
           browser_version: "9"
           os: OS X 10.11
