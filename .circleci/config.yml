@@ -58,11 +58,14 @@ jobs:
       browser_version:
         type: string
         default: ""  # evergreen
+      os:
+         type: string
     executor: node14
     environment:
       USE_SAUCE: true
       JASMINE_BROWSER: << parameters.browser_name >>
       SAUCE_BROWSER_VERSION: << parameters.browser_version >>
+      SAUCE_OS: << parameters.os >>
     steps:
       - checkout
       - run:
@@ -125,6 +128,7 @@ workflows:
           name: internet_explorer_11
           browser_name: internet explorer
           browser_version: "11"
+          os: Windows 8.1
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -132,6 +136,7 @@ workflows:
           name: internet_explorer_10
           browser_name: internet explorer
           browser_version: "10"
+          os: Windows 8
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -139,6 +144,7 @@ workflows:
           name: firefox_latest
           browser_name: firefox
           browser_version: ""
+          os: Windows 10
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -146,6 +152,7 @@ workflows:
           name: firefox_78
           browser_name: firefox
           browser_version: "78"
+          os: Windows 10
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -153,6 +160,7 @@ workflows:
           name: firefox_68
           browser_name: firefox
           browser_version: "68"
+          os: Windows 10
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -160,6 +168,7 @@ workflows:
           name: chrome_latest
           browser_name: chrome
           browser_version: ""
+          os: Windows 10
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -167,6 +176,7 @@ workflows:
           name: safari_14
           browser_name: safari
           browser_version: "14"
+          os: OS X 11.0
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -174,6 +184,7 @@ workflows:
           name: safari_13
           browser_name: safari
           browser_version: "13"
+          os: OS X 10.13
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -181,6 +192,7 @@ workflows:
           name: safari_8
           browser_name: safari
           browser_version: "8"
+          os: OS X 10.10
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -188,6 +200,7 @@ workflows:
           name: edge_latest
           browser_name: MicrosoftEdge
           browser_version: ""
+          os: Windows 10
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
