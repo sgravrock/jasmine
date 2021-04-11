@@ -155,7 +155,7 @@ workflows:
               ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
           name: chrome_latest
-          browser_name: firefox
+          browser_name: chrome
           browser_version: ""
           filters:
             branches:
