@@ -1,9 +1,12 @@
-# Useful links:
-# https://circleci.com/docs/2.0/concepts/
-# https://circleci.com/docs/2.0/sample-config/
-# https://circleci.com/docs/2.0/oss/
-# React example: https://github.com/facebook/react-native/blob/master/.circleci/config.yml
-# Yarn example: https://github.com/yarnpkg/yarn/blob/master/.circleci/config.yml
+# Run tests against supported Node versions, and (except for pull requests)
+# against supported browsers.
+
+# TODO:
+# * It would be nice to only run `npm install` once per node version and
+#   pass the result to downstream jobs.
+# * Set a more reasonable job timeout than the 5 hour default.
+# * Re-enable long property tests.
+
 version: 2.1
 
 orbs:

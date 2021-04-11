@@ -1,6 +1,0 @@
-* Finish fixing Sauce
-* https://discuss.circleci.com/t/issues-with-sauce-connect-proxy/36694/7
-https://github.com/saucelabs/CircleCI-SauceLabs-ORB/blob/master/src/%40orb.yml
-* Try to reuse npm install result across Node 14 jobs
-* Set a more reasonable job timeout
-* Re-enable long property tests
