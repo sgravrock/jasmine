@@ -86,10 +86,14 @@ jobs:
                exit 1
             fi
       - run:
+          name: fail
+          command: "false"
+      - run:
           name: Run tests
           command: npm run ci
       - run:
           name: Close Sauce tunnel
+          when: always
           command: killall sc
 
 workflows:
