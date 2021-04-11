@@ -50,11 +50,17 @@ jobs:
       JASMINE_LONG_PROPERTY_TESTS: y
 
   test_browser:
+    parameters:
+      browser_name:
+        type: string
+      browser_version:
+        type: string
+        default: ""  # evergreen
     executor: node14
     environment:
       USE_SAUCE: true
-      JASMINE_BROWSER: internet explorer
-      SAUCE_BROWSER_VERSION: 11
+      JASMINE_BROWSER: << parameters.browser_name >>
+      SAUCE_BROWSER_VERSION: << parameters.browser_version >>
     steps:
       - checkout
       - run:
@@ -79,7 +85,7 @@ jobs:
           no_output_timeout: 2m
           command: |
             sc -u ${SAUCE_USERNAME} -k ${SAUCE_ACCESS_KEY} -X 4445 | tee /tmp/sc-output &
-            # wait for sauce tunnel up to 1 minute
+            # wait for sauce tunnel
             while ! fgrep "Sauce Connect is up, you may start your tests." /tmp/sc-output > /dev/null; do
                 sleep 1
             done
@@ -112,7 +118,71 @@ workflows:
           name: test_node_10
       - test_browser:
           name: internet_explorer_11
+          browser_name: internet explorer
+          browser_version: "11"
           filters:
             branches:
-              # Don't run on pull requests.
-              ignore: /pull\/.*/
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: internet_explorer_10
+          browser_name: internet explorer
+          browser_version: "10"
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: firefox_latest
+          browser_name: firefox
+          browser_version: ""
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: firefox_78
+          browser_name: firefox
+          browser_version: "78"
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: firefox_68
+          browser_name: firefox
+          browser_version: "68"
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: chrome_latest
+          browser_name: firefox
+          browser_version: ""
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_14
+          browser_name: safari
+          browser_version: "14"
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_13
+          browser_name: safari
+          browser_version: "13"
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_8
+          browser_name: safari
+          browser_version: "8"
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: edge_latest
+          browser_name: MicrosoftEdge
+          browser_version: ""
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
