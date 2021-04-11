@@ -208,7 +208,7 @@ workflows:
           name: safari_9
           browser_name: safari
           browser_version: "9"
-          os: OS X 10.10
+          os: OS X 10.11
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -216,7 +216,7 @@ workflows:
           name: safari_10
           browser_name: safari
           browser_version: "10"
-          os: OS X 10.10
+          os: OS X 10.12
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -224,7 +224,7 @@ workflows:
           name: safari_11
           browser_name: safari
           browser_version: "11"
-          os: OS X 10.10
+          os: OS X 10.13
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -232,7 +232,7 @@ workflows:
           name: safari_12
           browser_name: safari
           browser_version: "12"
-          os: OS X 10.10
+          os: OS X 10.14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
