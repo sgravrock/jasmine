@@ -1,5 +1,4 @@
 describe('Env integration', function() {
-  it('fails', function() { expect(true).toBe(false); });
   var env;
 
   beforeEach(function() {
