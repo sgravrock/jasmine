@@ -86,9 +86,6 @@ jobs:
                exit 1
             fi
       - run:
-          name: fail
-          command: "false"
-      - run:
           name: Run tests
           command: npm run ci
       - run:
