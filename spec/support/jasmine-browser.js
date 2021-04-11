@@ -50,3 +50,7 @@ module.exports = {
     }
   }
 };
+
+console.log('jasmine-browser using OS:', module.exports.browser.sauce.os);
+console.log('jasmine-browser using browser:', module.exports.browser.name);
+console.log('jasmine-browser using browser version:', module.exports.browser.sauce.browserVersion);
