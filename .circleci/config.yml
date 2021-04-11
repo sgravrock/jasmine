@@ -98,7 +98,10 @@ jobs:
             fi
       - run:
           name: Run tests
-          command: npm run ci
+          command: |
+            echo Browser: $JASMINE_BROWSER
+            echo Version: ${SAUCE_BROWSER_VERSION:-(latest)}
+            npm run ci
       - run:
           name: Close Sauce tunnel
           when: always
