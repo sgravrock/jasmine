@@ -3,8 +3,10 @@
 
 # TODO:
 # * Remove Safari 9-12 once green
-# * Set a more reasonable job timeout than the 5 hour default.
 # * Consider removing OS params. Probably not needed.
+# * Maybe try to matrix the browser tests
+# * Update Travis references in badges & docs
+# * Cron
 
 version: 2.1
 
