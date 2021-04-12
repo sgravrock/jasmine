@@ -84,6 +84,7 @@ jobs:
       os:
          type: string
     executor: node14
+    parallelism: 3 # Don't exceed Saucelabs limits
     environment:
       USE_SAUCE: true
       JASMINE_BROWSER: << parameters.browser_name >>
