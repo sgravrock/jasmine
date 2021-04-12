@@ -4,7 +4,7 @@
 # TODO:
 # * Remove Safari 9-12 once green
 # * Set a more reasonable job timeout than the 5 hour default.
-# * Re-enable long property tests.
+# * Consider removing OS params. Probably not needed.
 
 version: 2.1
 
@@ -122,23 +122,22 @@ workflows:
       - build:
           executor: node14
           name: build_node14
-#      - build:
-#          executor: node12
-#          name: build_node12
- #     - test_node_with_long_property_tests:
-      - test_node:
+      - build:
+          executor: node12
+          name: build_node12
+      - test_node_with_long_property_tests:
           executor: node14
           name: node_14
           requires:
              - build_node14
-#      - test_node:
-#          executor: node12
-#          name: node_12
-#          requires:
-#             - build_node12
-#      - test_node:
-#          executor: node10
-#          name: node_10
+      - test_node:
+          executor: node12
+          name: node_12
+          requires:
+             - build_node12
+      - test_node:
+          executor: node10
+          name: node_10
       - test_browser:
           name: internet_explorer_11
           browser_name: internet explorer
@@ -149,115 +148,115 @@ workflows:
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: internet_explorer_10
-#          browser_name: internet explorer
-#          browser_version: "10"
-#          os: Windows 8
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: firefox_latest
-#          browser_name: firefox
-#          browser_version: ""
-#          os: Windows 10
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: firefox_78
-#          browser_name: firefox
-#          browser_version: "78"
-#          os: Windows 10
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: firefox_68
-#          requires:
-#             - build_node14
-#          browser_name: firefox
-#          browser_version: "68"
-#          os: Windows 10
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: chrome_latest
-#          browser_name: chrome
-#          browser_version: ""
-#          os: Windows 10
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: safari_14
-#          requires:
-#             - build_node14
-#          browser_name: safari
-#          browser_version: "14"
-#          os: OS X 11.00
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: safari_13
-#          browser_name: safari
-#          browser_version: "13"
-#          os: OS X 10.13
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: safari_8
-#          requires:
-#             - build_node14
-#          browser_name: safari
-#          browser_version: "8"
-#          os: OS X 10.10
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: edge_latest
-#          browser_name: MicrosoftEdge
-#          browser_version: ""
-#          os: Windows 10
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: safari_9
-#          requires:
-#             - build_node14
-#          browser_name: safari
-#          browser_version: "9"
-#          os: OS X 10.11
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: safari_10
-#          browser_name: safari
-#          browser_version: "10"
-#          os: OS X 10.12
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: safari_11
-#          browser_name: safari
-#          browser_version: "11"
-#          os: OS X 10.13
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
-#      - test_browser:
-#          name: safari_12
-#          browser_name: safari
-#          browser_version: "12"
-#          os: OS X 10.14
-#          filters:
-#            branches:
-#              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: internet_explorer_10
+          browser_name: internet explorer
+          browser_version: "10"
+          os: Windows 8
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: firefox_latest
+          browser_name: firefox
+          browser_version: ""
+          os: Windows 10
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: firefox_78
+          browser_name: firefox
+          browser_version: "78"
+          os: Windows 10
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: firefox_68
+          requires:
+             - build_node14
+          browser_name: firefox
+          browser_version: "68"
+          os: Windows 10
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: chrome_latest
+          browser_name: chrome
+          browser_version: ""
+          os: Windows 10
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_14
+          requires:
+             - build_node14
+          browser_name: safari
+          browser_version: "14"
+          os: OS X 11.00
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_13
+          browser_name: safari
+          browser_version: "13"
+          os: OS X 10.13
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_8
+          requires:
+             - build_node14
+          browser_name: safari
+          browser_version: "8"
+          os: OS X 10.10
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: edge_latest
+          browser_name: MicrosoftEdge
+          browser_version: ""
+          os: Windows 10
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_9
+          requires:
+             - build_node14
+          browser_name: safari
+          browser_version: "9"
+          os: OS X 10.11
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_10
+          browser_name: safari
+          browser_version: "10"
+          os: OS X 10.12
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_11
+          browser_name: safari
+          browser_version: "11"
+          os: OS X 10.13
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_12
+          browser_name: safari
+          browser_version: "12"
+          os: OS X 10.14
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
