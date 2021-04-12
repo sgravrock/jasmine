@@ -117,10 +117,11 @@ jobs:
           when: always
           command: |
             echo "Before killing sc:"
-            ps | fgrep 'sc -u' | sed 's/-u.*//'
+            ps -ef | grep 'sc -u' | grep -v grep | sed 's/-u.*/[redacted]/' || true
+            echo "Killing sc"
             killall --wait sc
             echo "After killing sc:"
-            ps | fgrep 'sc -u' | sed 's/-u.*//'
+            ps -ef | grep 'sc -u' | grep -v grep | sed 's/-u.*/[redacted]/' || true
 
 workflows:
   version: 2
