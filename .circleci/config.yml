@@ -116,7 +116,7 @@ jobs:
       - run:
           name: Close Sauce tunnel
           when: always
-          command: killall sc
+          command: killall --wait sc
 
 workflows:
   version: 2
