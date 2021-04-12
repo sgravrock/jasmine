@@ -121,35 +121,35 @@ workflows:
     jobs:
       - build:
           executor: node14
-          name: build_node14
+          name: build_node_14
       - build:
           executor: node12
-          name: build_node12
+          name: build_node_12
       - build:
           executor: node10
-          name: build_node10
+          name: build_node_10
       - test_node_with_long_property_tests:
           executor: node14
           name: test_node_14
           requires:
-             - build_node14
+             - build_node_14
       - test_node:
           executor: node12
           name: test_node_12
           requires:
-             - build_node12
+             - build_node_12
       - test_node:
           executor: node10
           name: test_node_10
           requires:
-             - build_node10
+             - build_node_10
       - test_browser:
           name: internet_explorer_11
           browser_name: internet explorer
           browser_version: "11"
           os: Windows 8.1
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -159,7 +159,7 @@ workflows:
           browser_version: "10"
           os: Windows 8
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -169,7 +169,7 @@ workflows:
           browser_version: ""
           os: Windows 10
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -179,7 +179,7 @@ workflows:
           browser_version: "78"
           os: Windows 10
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -189,7 +189,7 @@ workflows:
           browser_version: "68"
           os: Windows 10
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -199,7 +199,7 @@ workflows:
           browser_version: ""
           os: Windows 10
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -209,7 +209,7 @@ workflows:
           browser_version: "14"
           os: OS X 11.00
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -219,7 +219,7 @@ workflows:
           browser_version: "13"
           os: OS X 10.13
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -229,7 +229,7 @@ workflows:
           browser_version: "12"
           os: OS X 10.14
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -239,7 +239,7 @@ workflows:
           browser_version: "11"
           os: OS X 10.13
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -249,7 +249,7 @@ workflows:
           browser_version: "10"
           os: OS X 10.12
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -259,7 +259,7 @@ workflows:
           browser_version: "9"
           os: OS X 10.11
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -269,7 +269,7 @@ workflows:
           browser_version: "8"
           os: OS X 10.10
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -279,7 +279,7 @@ workflows:
           browser_version: ""
           os: Windows 10
           requires:
-             - build_node14
+             - build_node_14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
