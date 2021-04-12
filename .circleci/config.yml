@@ -119,9 +119,11 @@ jobs:
             echo "Before killing sc:"
             ps -ef | grep 'sc -u' | grep -v grep | sed 's/-u.*/[redacted]/' || true
             echo "Killing sc"
-            killall --wait sc
+            killall -TERM --wait sc
             echo "After killing sc:"
             ps -ef | grep 'sc -u' | grep -v grep | sed 's/-u.*/[redacted]/' || true
+            echo "Output:"
+            cat /tmp/sc-output
 
 workflows:
   version: 2
