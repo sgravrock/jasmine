@@ -153,6 +153,8 @@ workflows:
           browser_name: internet explorer
           browser_version: "10"
           os: Windows 8
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -161,6 +163,8 @@ workflows:
           browser_name: firefox
           browser_version: ""
           os: Windows 10
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -169,16 +173,18 @@ workflows:
           browser_name: firefox
           browser_version: "78"
           os: Windows 10
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
           name: firefox_68
-          requires:
-             - build_node14
           browser_name: firefox
           browser_version: "68"
           os: Windows 10
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -187,16 +193,18 @@ workflows:
           browser_name: chrome
           browser_version: ""
           os: Windows 10
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
           name: safari_14
-          requires:
-             - build_node14
           browser_name: safari
           browser_version: "14"
           os: OS X 11.00
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -205,16 +213,18 @@ workflows:
           browser_name: safari
           browser_version: "13"
           os: OS X 10.13
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
           name: safari_8
-          requires:
-             - build_node14
           browser_name: safari
           browser_version: "8"
           os: OS X 10.10
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -223,16 +233,18 @@ workflows:
           browser_name: MicrosoftEdge
           browser_version: ""
           os: Windows 10
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
           name: safari_9
-          requires:
-             - build_node14
           browser_name: safari
           browser_version: "9"
           os: OS X 10.11
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -241,6 +253,8 @@ workflows:
           browser_name: safari
           browser_version: "10"
           os: OS X 10.12
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -249,6 +263,8 @@ workflows:
           browser_name: safari
           browser_version: "11"
           os: OS X 10.13
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
@@ -257,6 +273,8 @@ workflows:
           browser_name: safari
           browser_version: "12"
           os: OS X 10.14
+          requires:
+             - build_node14
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
