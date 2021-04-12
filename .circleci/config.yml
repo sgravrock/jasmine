@@ -219,40 +219,10 @@ workflows:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
-          name: safari_8
+          name: safari_12
           browser_name: safari
-          browser_version: "8"
-          os: OS X 10.10
-          requires:
-             - build_node14
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: edge_latest
-          browser_name: MicrosoftEdge
-          browser_version: ""
-          os: Windows 10
-          requires:
-             - build_node14
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: safari_9
-          browser_name: safari
-          browser_version: "9"
-          os: OS X 10.11
-          requires:
-             - build_node14
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: safari_10
-          browser_name: safari
-          browser_version: "10"
-          os: OS X 10.12
+          browser_version: "12"
+          os: OS X 10.14
           requires:
              - build_node14
           filters:
@@ -269,10 +239,40 @@ workflows:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
       - test_browser:
-          name: safari_12
+          name: safari_10
           browser_name: safari
-          browser_version: "12"
-          os: OS X 10.14
+          browser_version: "10"
+          os: OS X 10.12
+          requires:
+             - build_node14
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_9
+          browser_name: safari
+          browser_version: "9"
+          os: OS X 10.11
+          requires:
+             - build_node14
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: safari_8
+          browser_name: safari
+          browser_version: "8"
+          os: OS X 10.10
+          requires:
+             - build_node14
+          filters:
+            branches:
+              ignore: /pull\/.*/ # Don't run on pull requests.
+      - test_browser:
+          name: edge_latest
+          browser_name: MicrosoftEdge
+          browser_version: ""
+          os: Windows 10
           requires:
              - build_node14
           filters:
