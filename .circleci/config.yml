@@ -122,6 +122,7 @@ jobs:
             killall -TERM --wait sc
             echo "After killing sc:"
             ps -ef | grep 'sc -u' | grep -v grep | sed 's/-u.*/[redacted]/' || true
+            sleep 30
             echo "Output:"
             cat /tmp/sc-output
 
