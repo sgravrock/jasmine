@@ -119,7 +119,7 @@ jobs:
             echo "Before killing sc:"
             ps -ef | grep 'sc -u' | grep -v grep | sed 's/-u.*/[redacted]/' || true
             echo "Killing sc"
-            killall -TERM --wait sc
+            killall -INT --wait sc
             echo "After killing sc:"
             ps -ef | grep 'sc -u' | grep -v grep | sed 's/-u.*/[redacted]/' || true
             sleep 30
