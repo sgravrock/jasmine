@@ -52,7 +52,7 @@ kill -INT $pid
 n=0
 while [ $n -lt 30 ] && ps -p $pid > /dev/null; do
 	sleep 1
-	kill -INT $pid
+	kill -INT $pid || true
 	n=$(($n + 1))
 done
 
