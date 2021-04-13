@@ -22,6 +22,11 @@ sc -u "$SAUCE_USERNAME" -k "$SAUCE_ACCESS_KEY" -X 4445 --pidfile "$pidfile" 2>&1
 
 while ! fgrep "Sauce Connect is up, you may start your tests." "$outfile" > /dev/null; do
     sleep 1
+
+	 if ! ps -p $(cat "$pidfile") > /dev/null; then
+	 	echo "Sauce Connect exited"
+		exit 1
+	 fi
 done
 
 if ! nc -z localhost 4445; then
