@@ -114,7 +114,7 @@ workflows:
       - build:
           executor: node10
           name: build_node_10
-      - test_node_with_long_property_tests:
+      - test_node:
           executor: node14
           name: test_node_14
           requires:
