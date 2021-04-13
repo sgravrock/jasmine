@@ -45,10 +45,11 @@ jobs:
           name: Install Sauce Connect
           command: |
             cd /tmp
-             curl https://saucelabs.com/downloads/sc-4.6.4-linux.tar.gz | tar zxf -
+            curl https://saucelabs.com/downloads/sc-4.6.4-linux.tar.gz | tar zxf -
             chmod +x sc-4.6.4-linux/bin/sc
-            cp sc-4.6.4-linux/bin/sc ~/workspace
-            ~/workspace/sc --version
+            mkdir ~/workspace/bin
+            cp sc-4.6.4-linux/bin/sc ~/workspace/bin
+            ~/workspace/bin/sc --version
       - run:
           name: Build
           command: npm run build
@@ -93,38 +94,12 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Open Sauce tunnel
-          no_output_timeout: 2m
-          command: |
-            ~/workspace/sc -u ${SAUCE_USERNAME} -k ${SAUCE_ACCESS_KEY} -X 4445 2>&1 | tee /tmp/sc-output &
-            # wait for sauce tunnel
-            while ! fgrep "Sauce Connect is up, you may start your tests." /tmp/sc-output > /dev/null; do
-                sleep 1
-            done
-            if ! nc -z localhost 4445; then
-               echo "Can't connect to Sauce tunnel"
-               killall sc
-               exit 1
-            fi
-      - run:
           name: Run tests
           command: |
             echo Browser: $JASMINE_BROWSER
             echo Version: ${SAUCE_BROWSER_VERSION:-(latest)}
-            npm run ci
-      - run:
-          name: Close Sauce tunnel
-          when: always
-          command: |
-            echo "Before killing sc:"
-            ps -ef | grep 'sc -u' | grep -v grep | sed 's/-u.*/[redacted]/' || true
-            echo "Killing sc"
-            killall -INT --wait sc
-            echo "After killing sc:"
-            ps -ef | grep 'sc -u' | grep -v grep | sed 's/-u.*/[redacted]/' || true
-            sleep 30
-            echo "Output:"
-            cat /tmp/sc-output
+            export PATH=$PATH:$HOME/workspace/bin
+            ./.circleci/run-with-sauce
 
 workflows:
   version: 2
