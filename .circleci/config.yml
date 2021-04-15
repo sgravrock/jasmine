@@ -129,3 +129,10 @@ workflows:
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
+    triggers:
+      - schedule:
+          cron: "0 0 * * 1"
+          filters:
+            branches:
+               only:
+                 - main
