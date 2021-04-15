@@ -75,31 +75,24 @@ jobs:
     environment:
       JASMINE_LONG_PROPERTY_TESTS: y
 
-  test_browser:
-    parameters:
-      browser_name:
-        type: string
-      browser_version:
-        type: string
-        default: ""  # evergreen
-      os:
-         type: string
+  test_browsers:
     executor: node14
-    environment:
-      USE_SAUCE: true
-      JASMINE_BROWSER: << parameters.browser_name >>
-      SAUCE_BROWSER_VERSION: << parameters.browser_version >>
-      SAUCE_OS: << parameters.os >>
     steps:
       - attach_workspace:
           at: .
       - run:
           name: Run tests
           command: |
-            echo Browser: $JASMINE_BROWSER
-            echo Version: ${SAUCE_BROWSER_VERSION:-(latest)}
-            export PATH=$PATH:$HOME/workspace/bin
-            ./.circleci/run-with-sauce
+            # Do everything in one step because Sauce Connect won't exit
+            # cleanly if we kill it from a different step than it started in.
+
+            .circleci/start-sauce-connect sauce-pidfile
+            set +o errexit
+            .circleci/run-all-browsers
+            exitcode=$?
+            set -o errexit
+            .circleci/stop-sauce-connect $(cat sauce-pidfile)
+            exit $exitcode
 
 workflows:
   version: 2
@@ -129,143 +122,9 @@ workflows:
           name: test_node_10
           requires:
              - build_node_10
-      - test_browser:
-          name: internet_explorer_11
-          browser_name: internet explorer
-          browser_version: "11"
-          os: Windows 8.1
+      - test_browsers:
           requires:
              - build_node_14
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: internet_explorer_10
-          browser_name: internet explorer
-          browser_version: "10"
-          os: Windows 8
-          requires:
-             - internet_explorer_11
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: firefox_latest
-          browser_name: firefox
-          browser_version: ""
-          os: Windows 10
-          requires:
-             - internet_explorer_10
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: firefox_78
-          browser_name: firefox
-          browser_version: "78"
-          os: Windows 10
-          requires:
-             - firefox_latest
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: firefox_68
-          browser_name: firefox
-          browser_version: "68"
-          os: Windows 10
-          requires:
-             - firefox_78
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: chrome_latest
-          browser_name: chrome
-          browser_version: ""
-          os: Windows 10
-          requires:
-             - firefox_68
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: safari_14
-          browser_name: safari
-          browser_version: "14"
-          os: OS X 11.00
-          requires:
-             - chrome_latest
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: safari_13
-          browser_name: safari
-          browser_version: "13"
-          os: OS X 10.13
-          requires:
-             - safari_14
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: safari_12
-          browser_name: safari
-          browser_version: "12"
-          os: OS X 10.14
-          requires:
-             - safari_13
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: safari_11
-          browser_name: safari
-          browser_version: "11"
-          os: OS X 10.13
-          requires:
-             - safari_12
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: safari_10
-          browser_name: safari
-          browser_version: "10"
-          os: OS X 10.12
-          requires:
-             - safari_11
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: safari_9
-          browser_name: safari
-          browser_version: "9"
-          os: OS X 10.11
-          requires:
-             - safari_10
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: safari_8
-          browser_name: safari
-          browser_version: "8"
-          os: OS X 10.10
-          requires:
-             - safari_9
-          filters:
-            branches:
-              ignore: /pull\/.*/ # Don't run on pull requests.
-      - test_browser:
-          name: edge_latest
-          browser_name: MicrosoftEdge
-          browser_version: ""
-          os: Windows 10
-          requires:
-             - safari_8
           filters:
             branches:
               ignore: /pull\/.*/ # Don't run on pull requests.
