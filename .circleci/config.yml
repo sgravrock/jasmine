@@ -86,6 +86,7 @@ jobs:
             # Do everything in one step because Sauce Connect won't exit
             # cleanly if we kill it from a different step than it started in.
 
+            export PATH=$PATH:$HOME/workspace/bin
             .circleci/start-sauce-connect sauce-pidfile
             set +o errexit
             .circleci/run-all-browsers
