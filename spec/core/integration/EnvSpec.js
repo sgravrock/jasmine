@@ -478,6 +478,7 @@ describe('Env integration', function() {
       'specDone',
       'suiteDone'
     ]);
+    var finalTimeoutRan = false;
 
     var assertions = function() {
       expect(reporter.specDone).not.toHaveFailedExpectationsForRunnable(
@@ -488,6 +489,9 @@ describe('Env integration', function() {
         'A suite',
         ['fail thrown']
       );
+      // This either isn't a problem or isn't the only problem. Other browser
+      // flakes fail without this assertion failing.
+      expect(finalTimeoutRan).withContext('tried to finish before the final timeout ran').toEqual(true);
       done();
     };
 
@@ -500,6 +504,7 @@ describe('Env integration', function() {
           setTimeout(function() {
             setTimeout(function() {
               global.onerror('fail');
+              finalTimeoutRan = true;
             });
           });
         });
