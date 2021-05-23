@@ -22,7 +22,6 @@ module.exports = {
     'helpers/BrowserFlags.js',
     'helpers/checkForMap.js',
     'helpers/checkForSet.js',
-    'helpers/checkForProxy.js',
     'helpers/checkForSymbol.js',
     'helpers/checkForUrl.js',
     'helpers/domHelpers.js',
